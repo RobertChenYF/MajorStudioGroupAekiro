@@ -6,7 +6,6 @@ using UnityEngine;
 public class CRT_State_SingleAttack : CRT_State
 {
     private float duration;
-
     private float t;
 
     public override void DoState()
@@ -28,6 +27,8 @@ public class CRT_State_SingleAttack : CRT_State
 
         duration = Boss.SingleAttackDuration;
         t = 0;
+
+        Boss.HitTargets();
     }
     public override void Leave()
     {

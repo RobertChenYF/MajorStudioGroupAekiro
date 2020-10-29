@@ -13,7 +13,7 @@ public abstract class CRT_State
         Boss = thisBoss;
     }
 
-    public abstract void DoState(); // defined in each State's Class
+    public abstract void DoState(); // State behavior if NOT an attack
 
     public virtual void Enter()
     {

@@ -4,22 +4,35 @@ using UnityEngine;
 
 public class Temp_Loc : MonoBehaviour
 {
-    public GameObject locA, locB, locC, locD;
+    SpriteRenderer sp;
+    [HideInInspector]
+    public bool isOccupied, isTargeted, isHit;
 
-    SpriteRenderer spA, spB, spC, spD;
+    public bool isUp;
+    public bool isRight;
 
     void Start()
     {
-        spA = locA.GetComponent<SpriteRenderer>();
-        spB = locB.GetComponent<SpriteRenderer>();
-        spC = locC.GetComponent<SpriteRenderer>();
-        spD = locD.GetComponent<SpriteRenderer>();
-
+        sp = this.GetComponent<SpriteRenderer>();
+        sp.color = Color.white;
     }
 
-    // Update is called once per frame
-    void Update()
+    public void Target()
     {
-        
+        sp.color = Color.yellow;
+        isTargeted = true;
+    }
+
+    public void Hit()
+    {
+        sp.color = Color.red;
+        isHit = true;
+    }
+
+    public void Clear()
+    {
+        sp.color = Color.white;
+        isTargeted = false;
+        isHit = false;
     }
 }

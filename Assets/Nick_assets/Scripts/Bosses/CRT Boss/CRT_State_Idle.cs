@@ -4,22 +4,30 @@ using UnityEngine;
 
 public class CRT_State_Idle : CRT_State
 {
+    private float duration;
+    private float t;
 
     public override void DoState()
     {
-        Debug.Log("IDLE");
-
-        //TEMP
-        if (Input.GetKeyDown(KeyCode.Q))
+        if (t < duration) // slight pause
         {
-            SM.ChangeState(SM.SingleAttack);
+            Debug.Log("IDLE");
+            t += Time.deltaTime;
         }
-        // SEARCH FOR PLAYER
+        else
+        {
+            SM.ChangeState(SM.PrepareAttack);
+        }
     }
 
     public override void Enter()
     {
         Boss.sp.color = Color.white;
+
+        duration = Boss.TimeBetweenAttacks;
+        t = 0;
+
+        Boss.ClearTargets();
     }
     public override void Leave()
     {
@@ -29,6 +37,5 @@ public class CRT_State_Idle : CRT_State
 
     public CRT_State_Idle(CRT_StateManager myStateManager, CRT_Boss myBoss) : base(myStateManager, myBoss)
     {
-
     }
 }
