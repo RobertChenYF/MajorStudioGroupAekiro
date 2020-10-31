@@ -14,7 +14,7 @@ public class Temp_Loc : MonoBehaviour
     void Start()
     {
         sp = this.GetComponent<SpriteRenderer>();
-        sp.color = Color.white;
+        sp.color = Color.cyan;
     }
 
     public void Target()
@@ -31,7 +31,7 @@ public class Temp_Loc : MonoBehaviour
 
     public void Clear()
     {
-        sp.color = Color.white;
+        sp.color = Color.cyan;
         isTargeted = false;
         isHit = false;
     }
