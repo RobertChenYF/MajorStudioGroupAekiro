@@ -5,17 +5,21 @@ using UnityEngine;
 public class Temp_Player : MonoBehaviour
 {
     public Temp_Loc locA, locB, locC, locD;
+    Temp_Loc currentLoc;
     Vector2 posA, posB, posC, posD;
     Vector2 targetPos;
 
     public bool isRight;
     public bool isUp;
+    bool canDamage = true;
+    public int Damage;
 
     void Start()
     {
         isRight = true;
         isUp = false;
         // START AT POS B (bottom right)
+        Damage = 0;
 
         posA = locA.transform.position;
         posB = locB.transform.position;
@@ -31,6 +35,7 @@ public class Temp_Player : MonoBehaviour
         if (isRight && isUp)
         {
             targetPos = posD;
+            currentLoc = locD;
             locD.isOccupied = true;
         }
         else
@@ -39,6 +44,7 @@ public class Temp_Player : MonoBehaviour
         if (isRight && !isUp)
         {
             targetPos = posB;
+            currentLoc = locB;
             locB.isOccupied = true;
         }
         else
@@ -47,6 +53,7 @@ public class Temp_Player : MonoBehaviour
         if (!isRight && isUp)
         {
             targetPos = posC;
+            currentLoc = locC;
             locC.isOccupied = true;
         }
         else
@@ -55,10 +62,28 @@ public class Temp_Player : MonoBehaviour
         if (!isRight && !isUp)
         {
             targetPos = posA;
+            currentLoc = locA;
             locA.isOccupied = true;
         }
         else
             locA.isOccupied = false;
+
+
+        if (currentLoc.isHit)
+        {
+            StartCoroutine(TakeDamage());
+        }
+
+    }
+
+    IEnumerator TakeDamage()
+    {
+        if (canDamage)
+            Damage++;
+        canDamage = false;
+        yield return new WaitForSeconds(0.75f);
+        canDamage = true;
+        
 
     }
 

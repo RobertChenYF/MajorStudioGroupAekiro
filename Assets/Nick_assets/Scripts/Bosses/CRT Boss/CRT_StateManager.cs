@@ -59,7 +59,7 @@ public class CRT_StateManager : MonoBehaviour
         DoubleAttack_ver = new CRT_State_Attack(Main_SM, Boss, "DoubleVer", Boss.DoubleDuration_norm, Boss.DoubleDuration_normPrep, Boss.DoubleCooldown_norm, false);
         AllAttack_simul = new CRT_State_Attack(Main_SM, Boss, "AllSimul", Boss.AllDuration_norm, Boss.AllDuration_normPrep, Boss.AllCooldown_norm, false);
 
-        attackStateList = new CRT_State[] { SingleAttack_normal, DoubleAttack_hoz, DoubleAttack_ver };
+        attackStateList = new CRT_State[] { SingleAttack_normal, DoubleAttack_hoz, DoubleAttack_ver, AllAttack_simul };
 
         ComboState = new CRT_State_Combo(Main_SM, Boss, "Combo", Idle);
 

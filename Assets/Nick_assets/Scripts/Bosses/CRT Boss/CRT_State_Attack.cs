@@ -5,7 +5,7 @@ using UnityEngine;
 [SerializeField]
 public class CRT_State_Attack : CRT_State
 {
-    private float t;
+    //private float t;
     private float timer;
 
     public override void DoState()
@@ -29,7 +29,7 @@ public class CRT_State_Attack : CRT_State
 
         if (isConsecutive)
         {
-            t = 0;
+            //t = 0;
             timer = PrepDuration;
         }
         else
