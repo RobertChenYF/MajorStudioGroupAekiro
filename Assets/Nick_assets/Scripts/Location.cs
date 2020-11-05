@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Temp_Loc : MonoBehaviour
+public class Location : MonoBehaviour
 {
-    SpriteRenderer sp;
+    public SpriteRenderer sp;
     [HideInInspector]
     public bool isOccupied, isTargeted, isHit;
 
@@ -13,25 +13,24 @@ public class Temp_Loc : MonoBehaviour
 
     void Start()
     {
-        sp = this.GetComponent<SpriteRenderer>();
-        sp.color = Color.cyan;
+        sp.color = new Color(1, 1, 1, 0.25f);
     }
 
     public void Target()
     {
-        sp.color = Color.yellow;
+        sp.color = new Color(1, 1, 0, 0.5f);
         isTargeted = true;
     }
 
     public void Hit()
     {
-        sp.color = Color.red;
+        sp.color = new Color(1, 0, 0, 0.75f);
         isHit = true;
     }
 
     public void Clear()
     {
-        sp.color = Color.cyan;
+        sp.color = new Color(1, 1, 1, 0.25f);
         isTargeted = false;
         isHit = false;
     }

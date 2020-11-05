@@ -4,15 +4,17 @@ using UnityEngine;
 
 public class Temp_Player : MonoBehaviour
 {
-    public Temp_Loc locA, locB, locC, locD;
-    Temp_Loc currentLoc;
+    public Location locA, locB, locC, locD;
+    Location currentLoc;
     Vector2 posA, posB, posC, posD;
     Vector2 targetPos;
 
-    public bool isRight;
-    public bool isUp;
-    bool canDamage = true;
+    [HideInInspector]
+    public bool isRight, isUp;
+    private bool canDamage = true;
+
     public int Damage;
+    public float damageBufferDelay = 0.75f;
 
     void Start()
     {
@@ -31,6 +33,36 @@ public class Temp_Player : MonoBehaviour
     void Update()
     {
         UpdateMovement();
+
+        
+
+
+        if (currentLoc.isHit)
+        {
+            StartCoroutine(TakeDamage());
+        }
+
+    }
+
+    IEnumerator TakeDamage()
+    {
+        if (canDamage)
+            Damage++;
+        canDamage = false;
+        yield return new WaitForSeconds(damageBufferDelay);
+        canDamage = true;
+    }
+
+    void UpdateMovement()
+    {
+        if (Input.GetKeyDown(KeyCode.RightArrow))
+            isRight = true;
+        if (Input.GetKeyDown(KeyCode.LeftArrow))
+            isRight = false;
+        if (Input.GetKeyDown(KeyCode.UpArrow))
+            isUp = true;
+        if (Input.GetKeyDown(KeyCode.DownArrow))
+            isUp = false;
 
         if (isRight && isUp)
         {
@@ -67,36 +99,6 @@ public class Temp_Player : MonoBehaviour
         }
         else
             locA.isOccupied = false;
-
-
-        if (currentLoc.isHit)
-        {
-            StartCoroutine(TakeDamage());
-        }
-
-    }
-
-    IEnumerator TakeDamage()
-    {
-        if (canDamage)
-            Damage++;
-        canDamage = false;
-        yield return new WaitForSeconds(0.75f);
-        canDamage = true;
-        
-
-    }
-
-    void UpdateMovement()
-    {
-        if (Input.GetKeyDown(KeyCode.RightArrow))
-            isRight = true;
-        if (Input.GetKeyDown(KeyCode.LeftArrow))
-            isRight = false;
-        if (Input.GetKeyDown(KeyCode.UpArrow))
-            isUp = true;
-        if (Input.GetKeyDown(KeyCode.DownArrow))
-            isUp = false;
 
         this.transform.position = Vector2.Lerp(this.transform.position, targetPos, Time.deltaTime * 10);
     }
