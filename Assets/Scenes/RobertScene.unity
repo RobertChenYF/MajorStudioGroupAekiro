@@ -476,7 +476,7 @@ MonoBehaviour:
   blockKey: 101
   secondsBeforeStartChargingAttack: 0.2
   maximumSecondsHoldingCharge: 1
-  DelayBeforeDeflect: 0.1
+  DelayBeforeDeflect: 0
   PerfectDeflectWindow: 0.5
   BlockRecover: 0.3
   SecondsBeforeStartRolling: 0.2

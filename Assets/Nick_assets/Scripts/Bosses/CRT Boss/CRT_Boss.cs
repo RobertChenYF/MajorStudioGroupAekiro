@@ -9,10 +9,20 @@ public class CRT_Boss : MonoBehaviour
     [HideInInspector]
     public int NumAttacks = 4; // How many different attacks does this boss know --> currently 4
     [HideInInspector]
-    public List<Temp_Loc> targets;
+    public List<Location> targets;
 
-    public Temp_Loc[] locations;
+    [Header("Attributes")]
+    public int MaxHealth = 50;
+    public float Phase2_Entry = 0.75f;
+    public float Phase3_Entry = 0.4f;
+    [HideInInspector]
+    public int health;
+    public Location[] locations;
     public int CurrentPhase = 1;
+    private float Phase2_Thresh;
+    private float Phase3_Thresh;
+    [HideInInspector]
+    public bool isAlive = true;
 
     [Header("Idle")]
     public float TimeBetweenAttacks = 1.5f;
@@ -49,28 +59,34 @@ public class CRT_Boss : MonoBehaviour
     public float AllDuration_normPrep = 1f;
     public float AllCooldown_norm = 0.75f;
 
-    Temp_Player player;
-
     private void Awake()
     {
         sp = this.GetComponent<SpriteRenderer>();
-        player = FindObjectOfType<Temp_Player>();
+        health = MaxHealth;
+
+        Phase2_Thresh = MaxHealth * Phase2_Entry;
+        Phase3_Thresh = MaxHealth * Phase3_Entry;
     }
 
     private void Update()
     {
-        // TEMP TEMP TEMP -- PHASES
-        if (Input.GetKeyDown(KeyCode.Alpha1))
+        if (health > Phase2_Thresh)
             CurrentPhase = 1;
-        if (Input.GetKeyDown(KeyCode.Alpha2))
+        else if (health <= Phase2_Thresh && health > Phase3_Thresh)
             CurrentPhase = 2;
-        if (Input.GetKeyDown(KeyCode.Alpha3))
+        else if (health <= Phase3_Thresh && health > 0)
             CurrentPhase = 3;
+        else
+        {
+            // DEAD
+            sp.color = Color.black;
+            isAlive = false;
+        }
     }
 
     public void TargetLocations()
     {
-        foreach (Temp_Loc l in targets)
+        foreach (Location l in targets)
         {
             l.Target();
         }
@@ -78,7 +94,7 @@ public class CRT_Boss : MonoBehaviour
 
     public void HitTargets()
     {
-        foreach (Temp_Loc l in targets)
+        foreach (Location l in targets)
         {
             l.Hit();
         }
@@ -91,7 +107,7 @@ public class CRT_Boss : MonoBehaviour
 
     public void ClearTargets()
     {
-        foreach (Temp_Loc l in targets)
+        foreach (Location l in targets)
         {
             l.Clear(); // Clear each target's "targeted" value
         }
@@ -100,7 +116,7 @@ public class CRT_Boss : MonoBehaviour
 
     IEnumerator HitTargets_Co(float delay)
     {
-        foreach (Temp_Loc l in targets)
+        foreach (Location l in targets)
         {
             l.Hit();
             yield return new WaitForSeconds(delay);

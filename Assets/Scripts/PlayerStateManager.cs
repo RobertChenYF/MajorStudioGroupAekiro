@@ -33,7 +33,7 @@ public class PlayerStateManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        ChangeState(new Idle(this));
+        ChangeState(new Idle(this, this.GetComponent<Player>()));
         currentAnimationState = AnimationState.Idle;
     }
 
@@ -67,6 +67,6 @@ public class PlayerStateManager : MonoBehaviour
     public void BackToIdle()
     {
         
-        ChangeState(new Idle(this));
+        ChangeState(new Idle(this, this.GetComponent<Player>()));
     }
 }
