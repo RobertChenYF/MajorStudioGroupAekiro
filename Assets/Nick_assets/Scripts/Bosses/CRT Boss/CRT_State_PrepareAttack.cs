@@ -13,9 +13,9 @@ public class CRT_State_PrepareAttack : CRT_State
 
     }
 
-    private Temp_Loc FindPlayer()
+    private Location FindPlayer()
     {
-        Temp_Loc loc = null;
+        Location loc = null;
         for(int i = 0; i < Boss.locations.Length; i++)
         {
             if (Boss.locations[i].isOccupied)
@@ -32,9 +32,9 @@ public class CRT_State_PrepareAttack : CRT_State
         return SM.comboNextState;
     }
 
-    private List<Temp_Loc> DetermineTargets(CRT_State attack, Temp_Loc player) // aquire targets according to attack
+    private List<Location> DetermineTargets(CRT_State attack, Location player) // aquire targets according to attack
     {
-        List<Temp_Loc> targets = new List<Temp_Loc>();
+        List<Location> targets = new List<Location>();
 
         switch (attack.GetName())
         {
@@ -73,7 +73,7 @@ public class CRT_State_PrepareAttack : CRT_State
                 return targets;
 
             case "AllSimul":
-                foreach (Temp_Loc t in Boss.locations)
+                foreach (Location t in Boss.locations)
                     targets.Add(t);
                 return targets;
 
@@ -116,7 +116,7 @@ public class CRT_State_PrepareAttack : CRT_State
     {
         Boss.sp.color = Color.yellow;
 
-        Temp_Loc playerLoc = FindPlayer(); // Find the location the player is occupying
+        Location playerLoc = FindPlayer(); // Find the location the player is occupying
         AttackToPerform = GetNextComboStep(); // Determine which attack to perform (random, currently)
         //Duration = DetermineDuration(AttackToPerform); // Determine duration of the current attack
         Boss.targets = DetermineTargets(AttackToPerform, playerLoc); // Determine the target locations based on the current attack

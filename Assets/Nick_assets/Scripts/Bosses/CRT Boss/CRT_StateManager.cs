@@ -8,6 +8,7 @@ public class CRT_StateManager : MonoBehaviour
     public CRT_State currentState;
     protected static CRT_StateManager Main_SM;
     protected static CRT_Boss Boss;
+    protected static Player player;
 
     public CRT_State Idle;
     public CRT_State PrepareAttack;
@@ -49,6 +50,7 @@ public class CRT_StateManager : MonoBehaviour
     {
         Main_SM = this;
         Boss = this.GetComponent<CRT_Boss>();
+        player = FindObjectOfType<Player>();
 
         Idle = new CRT_State_Idle(Main_SM, Boss, "Idle", Boss.TimeBetweenAttacks);
         PrepareAttack = new CRT_State_PrepareAttack(Main_SM, Boss, "Prepare", 0);
@@ -72,24 +74,32 @@ public class CRT_StateManager : MonoBehaviour
         Combo_2 = new CRT_State[] { SingleAttack_normal, SingleAttack_normal, SingleAttack_long };
         Combo_3 = new CRT_State[] { SingleAttack_normal, SingleAttack_quick, SingleAttack_quick, SingleAttack_long };
         Combo_4 = new CRT_State[] { DoubleAttack_hoz, DoubleAttack_hoz, AllAttack_simul };
-        Combo_5 = new CRT_State[] { DoubleAttack_hoz, DoubleAttack_ver, DoubleAttack_hoz, DoubleAttack_ver };
+        Combo_5 = new CRT_State[] { DoubleAttack_hoz, SingleAttack_quick, SingleAttack_quick, DoubleAttack_hoz, SingleAttack_quick, SingleAttack_quick };
         Combo_6 = new CRT_State[] { DoubleAttack_ver, DoubleAttack_ver, DoubleAttack_hoz, DoubleAttack_hoz, AllAttack_simul };
         Combo_7 = new CRT_State[] { DoubleAttack_ver, SingleAttack_quick, SingleAttack_quick, DoubleAttack_hoz, SingleAttack_long, SingleAttack_quick };
         Combo_8 = new CRT_State[] { AllAttack_simul, SingleAttack_long, SingleAttack_quick, SingleAttack_quick, DoubleAttack_hoz };
 
         // PHASE 1: MOVE LIST
-        MovesList_1 = new CRT_State[][] { Attack_1, Attack_2_h, Combo_1, Combo_2 };
+        MovesList_1 = new CRT_State[][] { Attack_1, Attack_2_v, Combo_1, Combo_2 };
         // PHASE 2: MOVE LIST
-        MovesList_2 = new CRT_State[][] { Attack_2_v, Attack_3, Combo_2, Combo_3, Combo_4 };
+        MovesList_2 = new CRT_State[][] { Attack_3, Combo_1, Combo_2, Combo_3, Combo_4 };
         // PHASE 2: MOVE LIST
-        MovesList_3 = new CRT_State[][] { Combo_3, Combo_4, Combo_5, Combo_6, Combo_7, Combo_8 };
+        MovesList_3 = new CRT_State[][] { Combo_4, Combo_5, Combo_6, Combo_7, Combo_8 };
 
         ChangeState(Idle); // Starting state is idle
     }
 
     private void Update()
     {
-        currentState.DoState();
+        if(Boss.isAlive)
+            currentState.DoState();
+
+        /*if (player.perfectDeflect)
+        {
+            StopAllCoroutines();
+            player.PerfectDeflect(false);
+            ChangeState(Idle);
+        }*/
     }
 
     public void ChangeState(CRT_State newState)
