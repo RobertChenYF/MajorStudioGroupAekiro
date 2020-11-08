@@ -37,12 +37,15 @@ public class CRT_State_Idle : CRT_State
         {
             case 1:
                 MoveList = SM.MovesList_1;
+                Duration = Boss.TimeBetweenAttacks_P1;
                 break;
             case 2:
                 MoveList = SM.MovesList_2;
+                Duration = Boss.TimeBetweenAttacks_P2;
                 break;
             case 3:
                 MoveList = SM.MovesList_3;
+                Duration = Boss.TimeBetweenAttacks_P3;
                 break;
             default:
                 break;

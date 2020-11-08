@@ -10,10 +10,10 @@ public abstract class CRT_State
     protected float Duration;
     protected float PrepDuration;
     protected float Cooldown;
-    protected bool isConsecutive;
+    protected bool isBlockable;
     protected CRT_State Previous;
 
-    public CRT_State(CRT_StateManager myStateManager, CRT_Boss thisBoss, string name, float dur, float prepDur, float cooldown, bool isConsec)
+    public CRT_State(CRT_StateManager myStateManager, CRT_Boss thisBoss, string name, float dur, float prepDur, float cooldown, bool isBlockable)
     {
         SM = myStateManager;
         Boss = thisBoss;
@@ -21,7 +21,7 @@ public abstract class CRT_State
         Duration = dur;
         PrepDuration = prepDur;
         Cooldown = cooldown;
-        isConsecutive = isConsec;
+        this.isBlockable = isBlockable;
     }
 
     public CRT_State(CRT_StateManager myStateManager, CRT_Boss thisBoss, string name, float dur)
@@ -68,7 +68,7 @@ public abstract class CRT_State
     }
     public bool IsConsec()
     {
-        return isConsecutive;
+        return isBlockable;
     }
 
     public virtual void Enter()

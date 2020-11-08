@@ -782,7 +782,9 @@ MonoBehaviour:
   - {fileID: 1813932855}
   CurrentPhase: 1
   isAlive: 1
-  TimeBetweenAttacks: 2
+  TimeBetweenAttacks_P1: 2.5
+  TimeBetweenAttacks_P2: 2
+  TimeBetweenAttacks_P3: 1.5
   SingleDuration_norm: 0.2
   SingleDuration_normPrep: 1
   SingleCooldown_norm: 0.2
@@ -798,6 +800,7 @@ MonoBehaviour:
   AllDuration_norm: 0.2
   AllDuration_normPrep: 1.25
   AllCooldown_norm: 0.75
+  StunnedDuration: 1.5
 --- !u!1 &587402083
 GameObject:
   m_ObjectHideFlags: 0
@@ -972,7 +975,7 @@ GameObject:
   - component: {fileID: 736789579}
   - component: {fileID: 736789578}
   m_Layer: 5
-  m_Name: Canvas
+  m_Name: UI_Canvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
