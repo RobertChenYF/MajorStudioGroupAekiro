@@ -18,6 +18,8 @@ public class CRT_StateManager : MonoBehaviour
     public CRT_State DoubleAttack_hoz;
     public CRT_State DoubleAttack_ver;
     public CRT_State AllAttack_simul;
+    public CRT_State Stunned;
+    public CRT_State Dead;
 
     public CRT_State ComboState;
     public CRT_State[] Attack_1;
@@ -52,14 +54,18 @@ public class CRT_StateManager : MonoBehaviour
         Boss = this.GetComponent<CRT_Boss>();
         player = FindObjectOfType<Player>();
 
-        Idle = new CRT_State_Idle(Main_SM, Boss, "Idle", Boss.TimeBetweenAttacks);
+        Idle = new CRT_State_Idle(Main_SM, Boss, "Idle", Boss.TimeBetweenAttacks_P1);
         PrepareAttack = new CRT_State_PrepareAttack(Main_SM, Boss, "Prepare", 0);
-        SingleAttack_normal = new CRT_State_Attack(Main_SM, Boss, "Single", Boss.SingleDuration_norm, Boss.SingleDuration_normPrep, Boss.SingleCooldown_norm, false);
-        SingleAttack_quick = new CRT_State_Attack(Main_SM, Boss, "Single", Boss.SingleDuration_quick, Boss.SingleDuration_quickPrep, Boss.SingleCooldown_quick, false);
-        SingleAttack_long = new CRT_State_Attack(Main_SM, Boss, "Single", Boss.SingleDuration_long, Boss.SingleDuration_longPrep, Boss.SingleCooldown_long, false);
-        DoubleAttack_hoz = new CRT_State_Attack(Main_SM, Boss, "DoubleHoz", Boss.DoubleDuration_norm, Boss.DoubleDuration_normPrep, Boss.DoubleCooldown_norm, false);
-        DoubleAttack_ver = new CRT_State_Attack(Main_SM, Boss, "DoubleVer", Boss.DoubleDuration_norm, Boss.DoubleDuration_normPrep, Boss.DoubleCooldown_norm, false);
-        AllAttack_simul = new CRT_State_Attack(Main_SM, Boss, "AllSimul", Boss.AllDuration_norm, Boss.AllDuration_normPrep, Boss.AllCooldown_norm, false);
+        Stunned = new CRT_State_Stunned(Main_SM, Boss, "Stunned", Boss.StunnedDuration);
+        Dead = new CRT_State_Dead(Main_SM, Boss, "Dead", 0);
+
+        SingleAttack_normal = new CRT_State_Attack(Main_SM, Boss, "Single", Boss.SingleDuration_norm, Boss.SingleDuration_normPrep, Boss.SingleCooldown_norm, true);
+        SingleAttack_quick = new CRT_State_Attack(Main_SM, Boss, "Single", Boss.SingleDuration_quick, Boss.SingleDuration_quickPrep, Boss.SingleCooldown_quick, true);
+        SingleAttack_long = new CRT_State_Attack(Main_SM, Boss, "Single" +
+            "", Boss.SingleDuration_long, Boss.SingleDuration_longPrep, Boss.SingleCooldown_long, true);
+        DoubleAttack_hoz = new CRT_State_Attack(Main_SM, Boss, "DoubleHoz", Boss.DoubleDuration_norm, Boss.DoubleDuration_normPrep, Boss.DoubleCooldown_norm, true);
+        DoubleAttack_ver = new CRT_State_Attack(Main_SM, Boss, "DoubleVer", Boss.DoubleDuration_norm, Boss.DoubleDuration_normPrep, Boss.DoubleCooldown_norm, true);
+        AllAttack_simul = new CRT_State_Attack(Main_SM, Boss, "AllSimul", Boss.AllDuration_norm, Boss.AllDuration_normPrep, Boss.AllCooldown_norm, true);
 
         attackStateList = new CRT_State[] { SingleAttack_normal, DoubleAttack_hoz, DoubleAttack_ver, AllAttack_simul };
 
@@ -91,15 +97,23 @@ public class CRT_StateManager : MonoBehaviour
 
     private void Update()
     {
-        if(Boss.isAlive)
+        if (Boss.isAlive)
             currentState.DoState();
-
-        /*if (player.perfectDeflect)
+        else
         {
-            StopAllCoroutines();
-            player.PerfectDeflect(false);
-            ChangeState(Idle);
-        }*/
+            StopCombo();
+            ChangeState(Dead);
+        }
+
+        //if (player.perfectDeflect)
+        if(Input.GetKeyDown(KeyCode.D))
+        {
+            if (comboActive)
+            {
+                StopCombo();
+                ChangeState(Stunned);
+            }
+        }
     }
 
     public void ChangeState(CRT_State newState)
@@ -112,6 +126,12 @@ public class CRT_StateManager : MonoBehaviour
     public void PerformCombo(CRT_State[] attackList)
     {
         StartCoroutine(Combo(attackList));
+    }
+
+    public void StopCombo()
+    {
+        comboActive = false;
+        StopAllCoroutines();
     }
 
     IEnumerator Combo(CRT_State[] attacks)
@@ -134,7 +154,6 @@ public class CRT_StateManager : MonoBehaviour
             yield return new WaitForSeconds(ComboState.GetPrevious().GetCooldown());
             comboStep++;
         }
-        //yield return new WaitForSeconds(attacks[comboStep - 1].GetCooldown());
         ChangeState(Idle);
         comboActive = false;
     }

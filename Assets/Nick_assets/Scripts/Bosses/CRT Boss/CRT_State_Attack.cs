@@ -27,16 +27,17 @@ public class CRT_State_Attack : CRT_State
     {
         Boss.sp.color = Color.red;
 
-        if (isConsecutive)
+        /*if (isConsecutive)
         {
             //t = 0;
             timer = PrepDuration;
         }
-        else
-            Boss.HitTargets(); // If not a consecutuve attack, 
+        else*/
+
+        Boss.HitTargets();
     }
 
-    IEnumerator ConcecAttacks()
+    IEnumerator ConsecAttacks()
     {
         yield return new WaitForSeconds(1);
     }
@@ -47,7 +48,7 @@ public class CRT_State_Attack : CRT_State
 
     }
 
-    public CRT_State_Attack(CRT_StateManager myStateManager, CRT_Boss myBoss, string myName, float myDur, float myPrepDur, float myCd, bool myCons) :base(myStateManager, myBoss, myName, myDur, myPrepDur, myCd, myCons)
+    public CRT_State_Attack(CRT_StateManager myStateManager, CRT_Boss myBoss, string myName, float myDur, float myPrepDur, float myCd, bool myBlock) :base(myStateManager, myBoss, myName, myDur, myPrepDur, myCd, myBlock)
     {
 
     }

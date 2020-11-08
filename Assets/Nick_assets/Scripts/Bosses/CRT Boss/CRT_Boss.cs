@@ -25,7 +25,10 @@ public class CRT_Boss : MonoBehaviour
     public bool isAlive = true;
 
     [Header("Idle")]
-    public float TimeBetweenAttacks = 1.5f;
+    public float TimeBetweenAttacks_P1 = 2.5f;
+    public float TimeBetweenAttacks_P2 = 2f;
+    public float TimeBetweenAttacks_P3 = 1.5f;
+
 
     //[Header("PrepareAttack")]
     //public float PrepDuration_All = 1.5f;
@@ -59,6 +62,9 @@ public class CRT_Boss : MonoBehaviour
     public float AllDuration_normPrep = 1f;
     public float AllCooldown_norm = 0.75f;
 
+    [Header("Stun-Deflected")]
+    public float StunnedDuration = 1f;
+
     private void Awake()
     {
         sp = this.GetComponent<SpriteRenderer>();
@@ -77,11 +83,7 @@ public class CRT_Boss : MonoBehaviour
         else if (health <= Phase3_Thresh && health > 0)
             CurrentPhase = 3;
         else
-        {
-            // DEAD
-            sp.color = Color.black;
             isAlive = false;
-        }
     }
 
     public void TargetLocations()
