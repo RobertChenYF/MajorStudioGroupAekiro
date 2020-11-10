@@ -30,12 +30,19 @@ public class Player : MonoBehaviour
     public bool perfectDeflect = false;
     public float deflectBufferDelay = 0.5f;
 
+    [Header("Take Damage")]
+    public int damageNormal = 2;
+    public int damageBlocking = 1;
 
-    //[HideInInspector]
+
+    [HideInInspector]
     public int health;
     [HideInInspector]
     public bool isRight, isUp;
+    [HideInInspector]
     public bool active = true;
+    [HideInInspector]
+    public bool isAlive = true;
 
     private PlayerStateManager Manager;
     private Location currentLoc;
@@ -71,6 +78,7 @@ public class Player : MonoBehaviour
         }
         else
         {
+            isAlive = false;
             damageIndicator.enabled = true;
         }
     }
@@ -132,30 +140,36 @@ public class Player : MonoBehaviour
 
     private void UpdateDamaged()
     {
-        /*if (currentLoc.isHit && isDeflecting)
+        if (currentLoc.isHit)
         {
-            StartCoroutine(Deflect());
-        }*/
-
-        if (currentLoc.isHit && !isBlocking && !isDeflecting)
-        {
-            StartCoroutine(TakeDamage());
+            if (isDeflecting && active)
+            {
+                StartCoroutine(Deflect());
+            }
+            else
+            {
+                if (isBlocking)
+                    StartCoroutine(TakeDamage(damageBlocking));
+                else
+                    StartCoroutine(TakeDamage(damageNormal));
+            }
         }
     }
 
     IEnumerator Deflect()
     {
         deflectIndicator.enabled = true;
+        perfectDeflect = true;
         yield return new WaitForSeconds(deflectBufferDelay);
         deflectIndicator.enabled = false;
 
     }
 
-    IEnumerator TakeDamage()
+    IEnumerator TakeDamage(int damage)
     {
         if (canDamage)
         {
-            health--;
+            health -= damage;
             damageIndicator.enabled = true;
             active = false;
         }

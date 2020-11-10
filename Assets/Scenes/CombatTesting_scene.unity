@@ -800,7 +800,7 @@ MonoBehaviour:
   AllDuration_norm: 0.2
   AllDuration_normPrep: 1.25
   AllCooldown_norm: 0.75
-  StunnedDuration: 1.5
+  StunnedDuration: 3
 --- !u!1 &587402083
 GameObject:
   m_ObjectHideFlags: 0
@@ -2860,7 +2860,7 @@ MonoBehaviour:
   sp: {fileID: 3157697216493273441}
   damageIndicator: {fileID: 2117913954}
   deflectIndicator: {fileID: 310673210}
-  MaxHealth: 10
+  MaxHealth: 14
   damageBufferDelay: 0.75
   DodgeSpeed: 4
   FlipSpriteBuffer: 1.2
@@ -2872,10 +2872,13 @@ MonoBehaviour:
   isDeflecting: 0
   perfectDeflect: 0
   deflectBufferDelay: 0.5
+  damageNormal: 2
+  damageBlocking: 1
   health: 0
   isRight: 0
   isUp: 0
   active: 1
+  isAlive: 1
 --- !u!4 &1164705803971200033
 Transform:
   m_ObjectHideFlags: 0
@@ -2960,7 +2963,7 @@ MonoBehaviour:
   secondsBeforeStartChargingAttack: 0.2
   maximumSecondsHoldingCharge: 1
   DelayBeforeDeflect: 0.1
-  PerfectDeflectWindow: 0.5
+  PerfectDeflectWindow: 0.2
   BlockRecover: 0.3
   SecondsBeforeStartRolling: 0.1
 --- !u!1 &5442009930585662590

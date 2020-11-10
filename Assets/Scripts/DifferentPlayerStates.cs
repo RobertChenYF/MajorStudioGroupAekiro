@@ -246,7 +246,11 @@ public class Deflect : PlayerState
     public override void Leave()
     {
         base.Leave();
+
         player.isDeflecting = false;
+
+        if(player.perfectDeflect)
+            player.perfectDeflect = false;
 
     }
 

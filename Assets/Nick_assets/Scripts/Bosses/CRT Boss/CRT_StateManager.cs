@@ -105,8 +105,7 @@ public class CRT_StateManager : MonoBehaviour
             ChangeState(Dead);
         }
 
-        //if (player.perfectDeflect)
-        if(Input.GetKeyDown(KeyCode.D))
+        if (player.perfectDeflect)
         {
             if (comboActive)
             {
