@@ -5,11 +5,11 @@ using UnityEngine;
 public class Location : MonoBehaviour
 {
     public SpriteRenderer sp;
-    [HideInInspector]
-    public bool isOccupied, isTargeted, isHit;
+    //[HideInInspector]
+    public bool isTargeted, isHit;
 
-    public bool isUp;
-    public bool isRight;
+    public bool isUp, isRight, isOccupied;
+    public bool OccupiedByBoss;
 
     void Start()
     {
@@ -26,6 +26,13 @@ public class Location : MonoBehaviour
     {
         sp.color = new Color(1, 0, 0, 0.75f);
         isHit = true;
+    }
+
+    public void ClearHit()
+    {
+        sp.color = new Color(1, 1, 1, 0.25f);
+        isHit = false;
+
     }
 
     public void Clear()
