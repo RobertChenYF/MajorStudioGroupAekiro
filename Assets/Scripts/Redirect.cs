@@ -12,4 +12,9 @@ public class Redirect: MonoBehaviour
     {
         MainCharacter.GetComponent<PlayerStateManager>().BackToIdle();
     }
+
+    public void Attack(float damage)
+    {
+        MainCharacter.GetComponent<PlayerStateManager>().MeleeAttack(damage);
+    }
 }
