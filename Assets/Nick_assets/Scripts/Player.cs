@@ -59,51 +59,10 @@ public class Player : MonoBehaviour
         isUp = currentLoc.isUp;
         currentLoc.isOccupied = true;
 
-        if (Input.GetKey(KeyCode.UpArrow))
-            aimUp = true;
-        if (Input.GetKey(KeyCode.DownArrow))
-            aimUp = false;
 
-        if (health > 0)
-        {
-            UpdateMovement();
-            UpdateDamaged();
-        }
-        else
-        {
-            damageIndicator.enabled = true;
-        }
     }
 
-    public Location FindTargetLocation()
-    {
-        // Each location has 2 possible locations you can dodge to
 
-        if (isRight && isUp) // D
-        {
-            if (!aimUp)
-                return locB;
-            else return locC;
-        }
-        else if (isRight && !isUp) // B
-        {
-            if (aimUp)
-                return locD;
-            else return locA;
-        }
-        else if (!isRight && isUp) // C
-        {
-            if (!aimUp)
-                return locA;
-            else return locD;
-        }
-        else //if (!isRight && !isUp) // A
-        {
-            if (aimUp)
-                return locC;
-            else return locB;
-        }
-    }
 
     public void Dodge(Location newLoc)
     {
@@ -143,13 +102,7 @@ public class Player : MonoBehaviour
         }
     }
 
-    IEnumerator Deflect()
-    {
-        deflectIndicator.enabled = true;
-        yield return new WaitForSeconds(deflectBufferDelay);
-        deflectIndicator.enabled = false;
 
-    }
 
     IEnumerator TakeDamage()
     {
@@ -181,4 +134,5 @@ public class Player : MonoBehaviour
         yield return new WaitForSeconds(delay);
         Boss.health -= damage;
     }
+    
 }
