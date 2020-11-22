@@ -7767,7 +7767,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2013611580}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -2.19, y: 0.4, z: 0}
+  m_LocalPosition: {x: -1.93, y: 0.15, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 134022414}
@@ -7875,6 +7875,8 @@ MonoBehaviour:
   shakeXMag: 0
   shakeYMag: 0
   shakeDuration: 0
+  rumbleIntensity: 0
+  rumbleDuration: 0
 --- !u!4 &2039236075
 Transform:
   m_ObjectHideFlags: 0
@@ -8078,7 +8080,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 68219260df9c6a24e8dc375e44a7bad8, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 704fbddbadb74024da9a68aba08370f6, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -8114,10 +8116,13 @@ MonoBehaviour:
   previousLoc: {fileID: 0}
   mainCharacterAnimation: {fileID: 8199908073459545716}
   playerFullHealth: 100
-  playerLightHitDamage: 10
+  playerLightHitDamage: 3
   hitKey: 113
   dodgeKey: 119
   blockKey: 101
+  ControllerHitKey: 0
+  ControllerDodgeKey: 0
+  ControllerBlockKey: 0
   secondsBeforeStartChargingAttack: 0.2
   maximumSecondsHoldingCharge: 1
   hitPauseDuration: 0.2

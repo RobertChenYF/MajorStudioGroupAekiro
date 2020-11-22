@@ -38,7 +38,9 @@ public class PlayerStateManager : MonoBehaviour
     public KeyCode hitKey;
     public KeyCode dodgeKey;
     public KeyCode blockKey;
-
+    public KeyCode ControllerHitKey;
+    public KeyCode ControllerDodgeKey;
+    public KeyCode ControllerBlockKey;
 
 
     [Header("Hit Attack Parameter")]
@@ -96,6 +98,7 @@ public class PlayerStateManager : MonoBehaviour
         BossMat.SetFloat("_flashAmount", bossFlashAmount);
         bossFlashAmount -= Time.deltaTime*2.0f;
         bossFlashAmount = Mathf.Max(0,bossFlashAmount);
+
     }
 
     public void ChangeState(PlayerState newPlayerState)
@@ -133,6 +136,7 @@ public class PlayerStateManager : MonoBehaviour
         Spark.Emit(100);
         bossFlashAmount += 0.9f;
         ScreenShake(lightAttackScreenShakeDuration,lightAttackScreenShakeMagnitude,lightAttackScreenShakeMagnitude);
+        ControllerRumble(0.10f,0.4f);
         //impact ring
         ImpactRing.SetTrigger("Hit");
         return HitResult.Land;
@@ -198,4 +202,12 @@ public class PlayerStateManager : MonoBehaviour
         
     }
         
+    public void ControllerRumble(float duration, float strength)
+    {
+        if (screenShakeControl.rumbleDuration < duration || screenShakeControl.rumbleIntensity < strength)
+        {
+            screenShakeControl.rumbleIntensity = strength;
+            screenShakeControl.rumbleDuration = duration;
+        }
+    }
 }

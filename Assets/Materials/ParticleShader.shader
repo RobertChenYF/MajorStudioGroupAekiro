@@ -7,8 +7,7 @@ Shader "ParticleShader"
 		_TintColor ("Tint Color", Color) = (0.5,0.5,0.5,0.5)
 		_MainTex ("Particle Texture", 2D) = "white" {}
 		_InvFade ("Soft Particles Factor", Range(0.01,3.0)) = 1.0
-		_TextureSample0("Texture Sample 0", 2D) = "white" {}
-		[HDR]_MainColor("_MainColor", Color) = (0,0,0,0)
+		[HDR]_Color0("Color 0", Color) = (0,0,0,0)
 		[HideInInspector] _texcoord( "", 2D ) = "white" {}
 
 	}
@@ -83,9 +82,7 @@ Shader "ParticleShader"
 				uniform fixed4 _TintColor;
 				uniform float4 _MainTex_ST;
 				uniform float _InvFade;
-				uniform sampler2D _TextureSample0;
-				uniform float4 _TextureSample0_ST;
-				uniform float4 _MainColor;
+				uniform float4 _Color0;
 
 
 				v2f vert ( appdata_t v  )
@@ -120,10 +117,10 @@ Shader "ParticleShader"
 						i.color.a *= fade;
 					#endif
 
-					float2 uv_TextureSample0 = i.texcoord.xy * _TextureSample0_ST.xy + _TextureSample0_ST.zw;
+					float2 uv_MainTex = i.texcoord.xy * _MainTex_ST.xy + _MainTex_ST.zw;
 					
 
-					fixed4 col = ( tex2D( _TextureSample0, uv_TextureSample0 ) * _MainColor );
+					fixed4 col = ( tex2D( _MainTex, uv_MainTex ) * _Color0 );
 					UNITY_APPLY_FOG(i.fogCoord, col);
 					return col;
 				}
@@ -137,14 +134,17 @@ Shader "ParticleShader"
 }
 /*ASEBEGIN
 Version=18707
-332;743;1607;757;1274.832;194.4688;1;True;False
-Node;AmplifyShaderEditor.SamplerNode;2;-639.5,7.5;Inherit;True;Property;_TextureSample0;Texture Sample 0;0;0;Create;True;0;0;False;0;False;-1;None;0000000000000000f000000000000000;True;0;False;white;Auto;False;Object;-1;Auto;Texture2D;8;0;SAMPLER2D;;False;1;FLOAT2;0,0;False;2;FLOAT;0;False;3;FLOAT2;0,0;False;4;FLOAT2;0,0;False;5;FLOAT;1;False;6;FLOAT;0;False;7;SAMPLERSTATE;;False;5;COLOR;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4
-Node;AmplifyShaderEditor.ColorNode;1;-622.5,246.5;Inherit;False;Property;_MainColor;_MainColor;1;1;[HDR];Create;True;0;0;False;0;False;0,0,0,0;21.36125,6.737566,0,1;True;0;5;COLOR;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4
+499;430;1607;940;1358.832;291.9688;1;True;False
+Node;AmplifyShaderEditor.TemplateShaderPropertyNode;21;-917.832,-4.968811;Inherit;True;0;0;_MainTex;Shader;False;0;5;SAMPLER2D;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4
+Node;AmplifyShaderEditor.SamplerNode;2;-639.5,7.5;Inherit;True;Property;_TextureSample0;Texture Sample 0;0;0;Create;True;0;0;False;0;False;-1;None;None;True;0;False;white;Auto;False;Object;-1;Auto;Texture2D;8;0;SAMPLER2D;;False;1;FLOAT2;0,0;False;2;FLOAT;0;False;3;FLOAT2;0,0;False;4;FLOAT2;0,0;False;5;FLOAT;1;False;6;FLOAT;0;False;7;SAMPLERSTATE;;False;5;COLOR;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4
+Node;AmplifyShaderEditor.ColorNode;23;-518.832,279.0312;Inherit;False;Property;_Color0;Color 0;1;1;[HDR];Create;True;0;0;False;0;False;0,0,0,0;0,0,0,0;True;0;5;COLOR;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4
 Node;AmplifyShaderEditor.SimpleMultiplyOpNode;3;-284.5,65.5;Inherit;False;2;2;0;COLOR;0,0,0,0;False;1;COLOR;0,0,0,0;False;1;COLOR;0
-Node;AmplifyShaderEditor.RangedFloatNode;19;-213.8322,213.5312;Inherit;False;Property;_Float0;Float 0;2;0;Create;True;0;0;False;0;False;0;0.1;0;0;0;1;FLOAT;0
+Node;AmplifyShaderEditor.RangedFloatNode;19;-213.8322,213.5312;Inherit;False;Property;_Float0;Float 0;0;0;Create;True;0;0;False;0;False;0;0.1;0;0;0;1;FLOAT;0
+Node;AmplifyShaderEditor.TemplateShaderPropertyNode;22;-943.832,241.0312;Inherit;False;0;0;_TintColor;Shader;False;0;5;COLOR;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4
 Node;AmplifyShaderEditor.TemplateMultiPassMasterNode;20;0,0;Float;False;True;-1;2;ASEMaterialInspector;0;9;ParticleShader;0b6a9f8b4f707c74ca64c0be8e590de0;True;SubShader 0 Pass 0;0;0;SubShader 0 Pass 0;2;True;2;5;False;-1;10;False;-1;0;1;False;-1;0;False;-1;False;False;False;False;False;False;False;False;True;2;False;-1;True;True;True;True;False;0;False;-1;False;False;False;False;True;2;False;-1;True;3;False;-1;False;True;4;Queue=Transparent=Queue=0;IgnoreProjector=True;RenderType=Transparent=RenderType;PreviewType=Plane;False;0;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;True;0;0;;0;0;Standard;0;0;1;True;False;;False;0
+WireConnection;2;0;21;0
 WireConnection;3;0;2;0
-WireConnection;3;1;1;0
+WireConnection;3;1;23;0
 WireConnection;20;0;3;0
 ASEEND*/
-//CHKSM=5BD343EFA083DCDB3F4BD6233FFED66ABE905A75
+//CHKSM=C2FA6234620C7D7DDD201D42C57AA3B30274D786
