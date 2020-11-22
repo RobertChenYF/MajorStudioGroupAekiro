@@ -113,8 +113,8 @@ Shader "SpriteHDRShader"
 }
 /*ASEBEGIN
 Version=18707
-472;272;1607;733;1295.016;112.2341;1;True;False
-Node;AmplifyShaderEditor.TemplateShaderPropertyNode;12;-748.016,145.7659;Inherit;False;0;0;_MainTex;Shader;False;0;5;SAMPLER2D;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4
+832;389;1607;970;1295.016;230.7341;1;True;False
+Node;AmplifyShaderEditor.TemplateShaderPropertyNode;12;-748.016,145.7659;Inherit;True;0;0;_MainTex;Shader;False;0;5;SAMPLER2D;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4
 Node;AmplifyShaderEditor.SamplerNode;9;-463.0159,104.7659;Inherit;True;Property;_TextureSample0;Texture Sample 0;0;0;Create;True;0;0;False;0;False;-1;None;None;True;0;False;white;Auto;False;Object;-1;Auto;Texture2D;8;0;SAMPLER2D;;False;1;FLOAT2;0,0;False;2;FLOAT;0;False;3;FLOAT2;0,0;False;4;FLOAT2;0,0;False;5;FLOAT;1;False;6;FLOAT;0;False;7;SAMPLERSTATE;;False;5;COLOR;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4
 Node;AmplifyShaderEditor.ColorNode;11;-457.0159,383.7659;Inherit;False;Property;_Color11;Color11;0;1;[HDR];Create;True;0;0;False;0;False;0,0,0,0;5.340313,3.271291,0,1;True;0;5;COLOR;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4
 Node;AmplifyShaderEditor.SimpleMultiplyOpNode;10;-92.01587,249.7659;Inherit;False;2;2;0;COLOR;0,0,0,0;False;1;COLOR;0,0,0,0;False;1;COLOR;0
@@ -124,4 +124,4 @@ WireConnection;10;0;9;0
 WireConnection;10;1;11;0
 WireConnection;5;0;10;0
 ASEEND*/
-//CHKSM=97FBD9BDDBBDA495431DB5E6BBD8D6F893AC7C16
+//CHKSM=45333FD229E662F67CABA515EDECEB23A2960B66

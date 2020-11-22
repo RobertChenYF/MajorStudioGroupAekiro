@@ -17,15 +17,15 @@ public class Idle : PlayerState
 
     public override void StateBehavior()
     {
-        if(Input.GetKeyDown(playerStateManager.hitKey))
+        if(Input.GetKey(playerStateManager.hitKey))
         {
             playerStateManager.ChangeState(new BeforeHitCharge(playerStateManager));
         }
-        else if(Input.GetKeyDown(playerStateManager.dodgeKey))
+        else if(Input.GetKey(playerStateManager.dodgeKey))
         {
             playerStateManager.ChangeState(new ReadyToRoll(playerStateManager));
         }
-        else if(Input.GetKeyDown(playerStateManager.blockKey))
+        else if(Input.GetKey(playerStateManager.blockKey))
         {
             playerStateManager.ChangeState(new StartBlocking(playerStateManager));
         }
@@ -102,6 +102,10 @@ public class HitCharge : PlayerState
         else if (chargeTime >= playerStateManager.maximumSecondsHoldingCharge)
         {
             playerStateManager.ChangeState(new HeavyHit(playerStateManager));
+        }
+        if (Input.GetKeyDown(playerStateManager.dodgeKey))
+        {
+            playerStateManager.ChangeState(new ReadyToRoll(playerStateManager));
         }
     }
 
@@ -379,6 +383,7 @@ public class Roll : PlayerState
         base.Enter();
         Debug.Log("Roll");
         playerStateManager.PlayAnimation(PlayerStateManager.AnimationState.Roll);
+        //playerStateManager.ScreenShake(0.1f,0.1f,0);
         if (playerStateManager.currentLoc == playerStateManager.locA)
         {
 
@@ -479,20 +484,25 @@ public class Shuffle : PlayerState
 
 public class Stun : PlayerState
 {
+    float timer = 0;
     public Stun(PlayerStateManager theGameStateManager) : base(theGameStateManager)
     {
 
     }
     public override void StateBehavior()
     {
-        
+        if (timer > playerStateManager.GetHitStunDuration)
+        {
+            playerStateManager.ChangeState(new Idle(playerStateManager));
+        }
+        timer += Time.deltaTime;
     }
 
     public override void Enter()
     {
         base.Enter();
         //play stun animation
-        playerStateManager.ChangeState(new Idle(playerStateManager));
+        playerStateManager.PlayAnimation(PlayerStateManager.AnimationState.Idle);
     }
     public override void Leave()
     {
