@@ -17,15 +17,15 @@ public class Idle : PlayerState
 
     public override void StateBehavior()
     {
-        if(Input.GetKey(playerStateManager.hitKey))
+        if(Input.GetButtonDown("attack"))
         {
             playerStateManager.ChangeState(new BeforeHitCharge(playerStateManager));
         }
-        else if(Input.GetKey(playerStateManager.dodgeKey))
+        else if(Input.GetButton("dodge"))
         {
             playerStateManager.ChangeState(new ReadyToRoll(playerStateManager));
         }
-        else if(Input.GetKey(playerStateManager.blockKey))
+        else if(Input.GetButton("block"))
         {
             playerStateManager.ChangeState(new StartBlocking(playerStateManager));
         }
@@ -58,7 +58,7 @@ public class BeforeHitCharge : PlayerState
     {
         timeHoldingAttackKey += Time.deltaTime;
 
-        if (Input.GetKeyUp(playerStateManager.hitKey))
+        if (Input.GetButtonUp("attack"))
         {
             playerStateManager.ChangeState(new LightHit(playerStateManager));
         }
@@ -94,7 +94,7 @@ public class HitCharge : PlayerState
     {
         chargeTime += Time.deltaTime;
         Debug.Log("charge heavy attack");
-        if (Input.GetKeyUp(playerStateManager.hitKey))
+        if (Input.GetButtonUp("attack"))
         {
             playerStateManager.ChangeState(new HeavyHit(playerStateManager));
 
@@ -103,7 +103,7 @@ public class HitCharge : PlayerState
         {
             playerStateManager.ChangeState(new HeavyHit(playerStateManager));
         }
-        if (Input.GetKeyDown(playerStateManager.dodgeKey))
+        if (Input.GetButtonDown("dodge"))
         {
             playerStateManager.ChangeState(new ReadyToRoll(playerStateManager));
         }
@@ -228,7 +228,7 @@ public class Deflect : PlayerState
     public override void StateBehavior()
     {
         timer += Time.deltaTime;
-        if (!Input.GetKey(playerStateManager.blockKey))
+        if (!Input.GetButton("block"))
         {
             playerStateManager.ChangeState(new BlockRecover(playerStateManager));
         }
@@ -266,7 +266,7 @@ public class Blocking : PlayerState
 
     public override void StateBehavior()
     {
-        if (!Input.GetKey(playerStateManager.blockKey))
+        if (!Input.GetButton("block"))
         {
             playerStateManager.ChangeState(new BlockRecover(playerStateManager));
         }
@@ -335,7 +335,7 @@ public class ReadyToRoll : PlayerState
     public override void StateBehavior()
     {
         timer += Time.deltaTime;
-        if (Input.GetKeyUp(playerStateManager.dodgeKey))
+        if (Input.GetButtonUp("dodge"))
         {
             playerStateManager.ChangeState(new Shuffle(playerStateManager));
         }
