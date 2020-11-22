@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class CRT_Boss : MonoBehaviour
 {
+    
+
+
     [HideInInspector]
     public SpriteRenderer sp;
     [HideInInspector]
@@ -68,6 +71,7 @@ public class CRT_Boss : MonoBehaviour
     private void Awake()
     {
         sp = this.GetComponent<SpriteRenderer>();
+       
         health = MaxHealth;
 
         Phase2_Thresh = MaxHealth * Phase2_Entry;
@@ -76,6 +80,7 @@ public class CRT_Boss : MonoBehaviour
 
     private void Update()
     {
+        
         if (health > Phase2_Thresh)
             CurrentPhase = 1;
         else if (health <= Phase2_Thresh && health > Phase3_Thresh)
