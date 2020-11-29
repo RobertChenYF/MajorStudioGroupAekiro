@@ -9,7 +9,7 @@ public class Temp_Player : MonoBehaviour
     Vector2 posA, posB, posC, posD;
     Vector2 targetPos;
 
-    [HideInInspector]
+    //[HideInInspector]
     public bool isRight, isUp;
     private bool canDamage = true;
 
