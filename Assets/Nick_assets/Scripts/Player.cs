@@ -30,19 +30,12 @@ public class Player : MonoBehaviour
     public bool perfectDeflect = false;
     public float deflectBufferDelay = 0.5f;
 
-    [Header("Take Damage")]
-    public int damageNormal = 2;
-    public int damageBlocking = 1;
 
-
-    [HideInInspector]
+    //[HideInInspector]
     public int health;
     [HideInInspector]
     public bool isRight, isUp;
-    [HideInInspector]
     public bool active = true;
-    [HideInInspector]
-    public bool isAlive = true;
 
     private PlayerStateManager Manager;
     private Location currentLoc;
@@ -66,52 +59,10 @@ public class Player : MonoBehaviour
         isUp = currentLoc.isUp;
         currentLoc.isOccupied = true;
 
-        if (Input.GetKey(KeyCode.UpArrow))
-            aimUp = true;
-        if (Input.GetKey(KeyCode.DownArrow))
-            aimUp = false;
 
-        if (health > 0)
-        {
-            UpdateMovement();
-            UpdateDamaged();
-        }
-        else
-        {
-            isAlive = false;
-            damageIndicator.enabled = true;
-        }
     }
 
-    public Location FindTargetLocation()
-    {
-        // Each location has 2 possible locations you can dodge to
 
-        if (isRight && isUp) // D
-        {
-            if (!aimUp)
-                return locB;
-            else return locC;
-        }
-        else if (isRight && !isUp) // B
-        {
-            if (aimUp)
-                return locD;
-            else return locA;
-        }
-        else if (!isRight && isUp) // C
-        {
-            if (!aimUp)
-                return locA;
-            else return locD;
-        }
-        else //if (!isRight && !isUp) // A
-        {
-            if (aimUp)
-                return locC;
-            else return locB;
-        }
-    }
 
     public void Dodge(Location newLoc)
     {
@@ -140,36 +91,24 @@ public class Player : MonoBehaviour
 
     private void UpdateDamaged()
     {
-        if (currentLoc.isHit)
+        /*if (currentLoc.isHit && isDeflecting)
         {
-            if (isDeflecting && active)
-            {
-                StartCoroutine(Deflect());
-            }
-            else
-            {
-                if (isBlocking)
-                    StartCoroutine(TakeDamage(damageBlocking));
-                else
-                    StartCoroutine(TakeDamage(damageNormal));
-            }
+            StartCoroutine(Deflect());
+        }*/
+
+        if (currentLoc.isHit && !isBlocking && !isDeflecting)
+        {
+            StartCoroutine(TakeDamage());
         }
     }
 
-    IEnumerator Deflect()
-    {
-        deflectIndicator.enabled = true;
-        perfectDeflect = true;
-        yield return new WaitForSeconds(deflectBufferDelay);
-        deflectIndicator.enabled = false;
 
-    }
 
-    IEnumerator TakeDamage(int damage)
+    IEnumerator TakeDamage()
     {
         if (canDamage)
         {
-            health -= damage;
+            health--;
             damageIndicator.enabled = true;
             active = false;
         }
@@ -195,4 +134,5 @@ public class Player : MonoBehaviour
         yield return new WaitForSeconds(delay);
         Boss.health -= damage;
     }
+    
 }

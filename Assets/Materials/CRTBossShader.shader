@@ -1,0 +1,148 @@
+// Made with Amplify Shader Editor
+// Available at the Unity Asset Store - http://u3d.as/y3X 
+Shader "CRTBossShader"
+{
+	Properties
+	{
+		[PerRendererData] _MainTex ("Sprite Texture", 2D) = "white" {}
+		_Color ("Tint", Color) = (1,1,1,1)
+		[MaterialToggle] PixelSnap ("Pixel snap", Float) = 0
+		[PerRendererData] _AlphaTex ("External Alpha", 2D) = "white" {}
+		_flashAmount("flashAmount", Float) = 0
+		[HDR]_FlashColor("FlashColor", Color) = (1,1,1,1)
+		[HideInInspector] _texcoord( "", 2D ) = "white" {}
+
+	}
+
+	SubShader
+	{
+		LOD 0
+
+		Tags { "Queue"="Transparent" "IgnoreProjector"="True" "RenderType"="Transparent" "PreviewType"="Plane" "CanUseSpriteAtlas"="True" }
+
+		Cull Off
+		Lighting Off
+		ZWrite Off
+		Blend One OneMinusSrcAlpha
+		
+		
+		Pass
+		{
+		CGPROGRAM
+			
+			#pragma vertex vert
+			#pragma fragment frag
+			#pragma target 3.0
+			#pragma multi_compile _ PIXELSNAP_ON
+			#pragma multi_compile _ ETC1_EXTERNAL_ALPHA
+			#include "UnityCG.cginc"
+			
+
+			struct appdata_t
+			{
+				float4 vertex   : POSITION;
+				float4 color    : COLOR;
+				float2 texcoord : TEXCOORD0;
+				UNITY_VERTEX_INPUT_INSTANCE_ID
+				
+			};
+
+			struct v2f
+			{
+				float4 vertex   : SV_POSITION;
+				fixed4 color    : COLOR;
+				float2 texcoord  : TEXCOORD0;
+				UNITY_VERTEX_INPUT_INSTANCE_ID
+				UNITY_VERTEX_OUTPUT_STEREO
+				
+			};
+			
+			uniform fixed4 _Color;
+			uniform float _EnableExternalAlpha;
+			uniform sampler2D _MainTex;
+			uniform sampler2D _AlphaTex;
+			uniform float4 _MainTex_ST;
+			uniform float4 _FlashColor;
+			uniform float _flashAmount;
+
+			
+			v2f vert( appdata_t IN  )
+			{
+				v2f OUT;
+				UNITY_SETUP_INSTANCE_ID(IN);
+				UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO(OUT);
+				UNITY_TRANSFER_INSTANCE_ID(IN, OUT);
+				
+				
+				IN.vertex.xyz +=  float3(0,0,0) ; 
+				OUT.vertex = UnityObjectToClipPos(IN.vertex);
+				OUT.texcoord = IN.texcoord;
+				OUT.color = IN.color * _Color;
+				#ifdef PIXELSNAP_ON
+				OUT.vertex = UnityPixelSnap (OUT.vertex);
+				#endif
+
+				return OUT;
+			}
+
+			fixed4 SampleSpriteTexture (float2 uv)
+			{
+				fixed4 color = tex2D (_MainTex, uv);
+
+#if ETC1_EXTERNAL_ALPHA
+				// get the color from an external texture (usecase: Alpha support for ETC1 on android)
+				fixed4 alpha = tex2D (_AlphaTex, uv);
+				color.a = lerp (color.a, alpha.r, _EnableExternalAlpha);
+#endif //ETC1_EXTERNAL_ALPHA
+
+				return color;
+			}
+			
+			fixed4 frag(v2f IN  ) : SV_Target
+			{
+				float2 uv_MainTex = IN.texcoord.xy * _MainTex_ST.xy + _MainTex_ST.zw;
+				float4 tex2DNode5 = tex2D( _MainTex, uv_MainTex );
+				float ifLocalVar12 = 0;
+				if( tex2DNode5.a <= 0.0 )
+				ifLocalVar12 = 0.0;
+				else
+				ifLocalVar12 = 1.0;
+				float4 lerpResult10 = lerp( tex2DNode5 , ( ifLocalVar12 * _FlashColor ) , _flashAmount);
+				
+				fixed4 c = lerpResult10;
+				c.rgb *= c.a;
+				return c;
+			}
+		ENDCG
+		}
+	}
+	CustomEditor "ASEMaterialInspector"
+	
+	
+}
+/*ASEBEGIN
+Version=18707
+215;481;1607;952;947.0702;134.2596;1;True;False
+Node;AmplifyShaderEditor.TemplateShaderPropertyNode;3;-946.2459,-148.644;Inherit;True;0;0;_MainTex;Shader;False;0;5;SAMPLER2D;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4
+Node;AmplifyShaderEditor.SamplerNode;5;-700.9621,-126.5716;Inherit;True;Property;_TextureSample0;Texture Sample 0;0;0;Create;True;0;0;False;0;False;-1;None;None;True;0;False;white;Auto;False;Object;-1;Auto;Texture2D;8;0;SAMPLER2D;;False;1;FLOAT2;0,0;False;2;FLOAT;0;False;3;FLOAT2;0,0;False;4;FLOAT2;0,0;False;5;FLOAT;1;False;6;FLOAT;0;False;7;SAMPLERSTATE;;False;5;COLOR;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4
+Node;AmplifyShaderEditor.RangedFloatNode;13;-543.0702,124.7404;Inherit;False;Constant;_Float0;Float 0;2;0;Create;True;0;0;False;0;False;1;0;0;0;0;1;FLOAT;0
+Node;AmplifyShaderEditor.RangedFloatNode;14;-519.0702,211.7404;Inherit;False;Constant;_Float1;Float 1;2;0;Create;True;0;0;False;0;False;0;0;0;0;0;1;FLOAT;0
+Node;AmplifyShaderEditor.ColorNode;8;-406.9908,328.2126;Inherit;False;Property;_FlashColor;FlashColor;1;1;[HDR];Create;True;0;0;False;0;False;1,1,1,1;0.5019608,0.5019608,0.5019608,1;True;0;5;COLOR;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4
+Node;AmplifyShaderEditor.ConditionalIfNode;12;-239.736,81.95837;Inherit;False;False;5;0;FLOAT;0;False;1;FLOAT;0;False;2;FLOAT;0;False;3;FLOAT;0;False;4;FLOAT;0;False;1;FLOAT;0
+Node;AmplifyShaderEditor.SimpleMultiplyOpNode;7;25.89492,231.1059;Inherit;True;2;2;0;FLOAT;0;False;1;COLOR;0,0,0,0;False;1;COLOR;0
+Node;AmplifyShaderEditor.RangedFloatNode;11;246.4191,291.0282;Inherit;False;Property;_flashAmount;flashAmount;0;0;Create;True;0;0;False;0;False;0;1.92;0;0;0;1;FLOAT;0
+Node;AmplifyShaderEditor.LerpOp;10;527.9478,104.9108;Inherit;True;3;0;COLOR;0,0,0,0;False;1;COLOR;0,0,0,0;False;2;FLOAT;0;False;1;COLOR;0
+Node;AmplifyShaderEditor.TemplateMultiPassMasterNode;1;787.9281,64.79527;Float;False;True;-1;2;ASEMaterialInspector;0;8;CRTBossShader;0f8ba0101102bb14ebf021ddadce9b49;True;SubShader 0 Pass 0;0;0;SubShader 0 Pass 0;2;True;3;1;False;-1;10;False;-1;0;1;False;-1;0;False;-1;False;False;False;False;False;False;False;False;True;2;False;-1;False;False;False;False;False;True;2;False;-1;False;False;True;5;Queue=Transparent=Queue=0;IgnoreProjector=True;RenderType=Transparent=RenderType;PreviewType=Plane;CanUseSpriteAtlas=True;False;0;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;True;2;0;;0;0;Standard;0;0;1;True;False;;False;0
+WireConnection;5;0;3;0
+WireConnection;12;0;5;4
+WireConnection;12;2;13;0
+WireConnection;12;3;14;0
+WireConnection;12;4;14;0
+WireConnection;7;0;12;0
+WireConnection;7;1;8;0
+WireConnection;10;0;5;0
+WireConnection;10;1;7;0
+WireConnection;10;2;11;0
+WireConnection;1;0;10;0
+ASEEND*/
+//CHKSM=F0A192FFC2F94848E26BA42D35A9F9A64CA08EC9

@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class CRT_Boss : MonoBehaviour
 {
+
+    public PlayerStateManager playerStateManager;
+
     [HideInInspector]
     public SpriteRenderer sp;
     [HideInInspector]
@@ -68,6 +71,7 @@ public class CRT_Boss : MonoBehaviour
     private void Awake()
     {
         sp = this.GetComponent<SpriteRenderer>();
+       
         health = MaxHealth;
 
         Phase2_Thresh = MaxHealth * Phase2_Entry;
@@ -76,6 +80,7 @@ public class CRT_Boss : MonoBehaviour
 
     private void Update()
     {
+        
         if (health > Phase2_Thresh)
             CurrentPhase = 1;
         else if (health <= Phase2_Thresh && health > Phase3_Thresh)
@@ -99,6 +104,8 @@ public class CRT_Boss : MonoBehaviour
         foreach (Location l in targets)
         {
             l.Hit();
+            //get hit function
+            playerStateManager.getMeleeAttacked(l, 1);
         }
     }
 
@@ -121,6 +128,7 @@ public class CRT_Boss : MonoBehaviour
         foreach (Location l in targets)
         {
             l.Hit();
+            playerStateManager.getMeleeAttacked(l,1);
             yield return new WaitForSeconds(delay);
         }
     }

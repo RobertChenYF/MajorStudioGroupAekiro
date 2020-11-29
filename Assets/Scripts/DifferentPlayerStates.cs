@@ -10,24 +10,24 @@ public class DifferentPlayerStates : MonoBehaviour
 
 public class Idle : PlayerState
 {
-    public Idle(PlayerStateManager theGameStateManager, Player thePlayer) : base(theGameStateManager, thePlayer)
+    public Idle(PlayerStateManager theGameStateManager) : base(theGameStateManager)
     {
 
     }
 
     public override void StateBehavior()
     {
-        if(Input.GetKeyDown(playerStateManager.hitKey))
+        if(Input.GetButtonDown("attack"))
         {
-            playerStateManager.ChangeState(new BeforeHitCharge(playerStateManager, player));
+            playerStateManager.ChangeState(new BeforeHitCharge(playerStateManager));
         }
-        else if(Input.GetKeyDown(playerStateManager.dodgeKey))
+        else if(Input.GetButtonDown("dodge"))
         {
-            playerStateManager.ChangeState(new ReadyToRoll(playerStateManager, player));
+            playerStateManager.ChangeState(new ReadyToRoll(playerStateManager));
         }
-        else if(Input.GetKeyDown(playerStateManager.blockKey))
+        else if(Input.GetButton("block"))
         {
-            playerStateManager.ChangeState(new StartBlocking(playerStateManager, player));
+            playerStateManager.ChangeState(new StartBlocking(playerStateManager));
         }
     }
 
@@ -49,7 +49,7 @@ public class Idle : PlayerState
 public class BeforeHitCharge : PlayerState
 {
     public float timeHoldingAttackKey = 0;
-    public BeforeHitCharge(PlayerStateManager theGameStateManager, Player thePlayer) : base(theGameStateManager, thePlayer)
+    public BeforeHitCharge(PlayerStateManager theGameStateManager) : base(theGameStateManager)
     {
 
     }
@@ -58,13 +58,13 @@ public class BeforeHitCharge : PlayerState
     {
         timeHoldingAttackKey += Time.deltaTime;
 
-        if (Input.GetKeyUp(playerStateManager.hitKey))
+        if (Input.GetButtonUp("attack"))
         {
-            playerStateManager.ChangeState(new LightHit(playerStateManager, player));
+            playerStateManager.ChangeState(new LightHit(playerStateManager));
         }
         else if (timeHoldingAttackKey >= playerStateManager.secondsBeforeStartChargingAttack)
         {
-            playerStateManager.ChangeState(new HitCharge(playerStateManager, player));
+            playerStateManager.ChangeState(new HitCharge(playerStateManager));
         }
     }
 
@@ -85,7 +85,7 @@ public class BeforeHitCharge : PlayerState
 public class HitCharge : PlayerState
 {
     public static float chargeTime;
-    public HitCharge(PlayerStateManager theGameStateManager, Player thePlayer) : base(theGameStateManager, thePlayer)
+    public HitCharge(PlayerStateManager theGameStateManager) : base(theGameStateManager)
     {
 
     }
@@ -93,15 +93,21 @@ public class HitCharge : PlayerState
     public override void StateBehavior()
     {
         chargeTime += Time.deltaTime;
+        playerStateManager.ChargeAttack();
+        //Debug.Log(playerStateManager.heavyHitDamage);
         Debug.Log("charge heavy attack");
-        if (Input.GetKeyUp(playerStateManager.hitKey))
+        if (Input.GetButtonUp("attack"))
         {
-            playerStateManager.ChangeState(new HeavyHit(playerStateManager, player));
+            playerStateManager.ChangeState(new HeavyHit(playerStateManager));
 
         }
         else if (chargeTime >= playerStateManager.maximumSecondsHoldingCharge)
         {
-            playerStateManager.ChangeState(new HeavyHit(playerStateManager, player));
+            playerStateManager.ChangeState(new HeavyHit(playerStateManager));
+        }
+        if (Input.GetButtonDown("dodge"))
+        {
+            playerStateManager.ChangeState(new ReadyToRoll(playerStateManager));
         }
     }
 
@@ -109,12 +115,13 @@ public class HitCharge : PlayerState
     {
         base.Enter();
         chargeTime = 0;
+        playerStateManager.heavyHitDamage = playerStateManager.playerLightHitDamage;
         playerStateManager.PlayAnimation(PlayerStateManager.AnimationState.ChargeHeavyHit);
     }
     public override void Leave()
     {
         base.Leave();
-
+        
     }
 
 }
@@ -122,7 +129,7 @@ public class HitCharge : PlayerState
 public class LightHit : PlayerState
 {
 
-    public LightHit(PlayerStateManager theGameStateManager, Player thePlayer) : base(theGameStateManager, thePlayer)
+    public LightHit(PlayerStateManager theGameStateManager) : base(theGameStateManager)
     {
 
     }
@@ -139,7 +146,7 @@ public class LightHit : PlayerState
         base.Enter();
         Debug.Log("Light Hit");
         playerStateManager.PlayAnimation(PlayerStateManager.AnimationState.LightHit);
-        player.DealDamageLight();
+        
     }
     public override void Leave()
     {
@@ -152,7 +159,7 @@ public class LightHit : PlayerState
 public class HeavyHit : PlayerState
 {
 
-    public HeavyHit(PlayerStateManager theGameStateManager, Player thePlayer) : base(theGameStateManager, thePlayer)
+    public HeavyHit(PlayerStateManager theGameStateManager) : base(theGameStateManager)
     {
 
     }
@@ -169,12 +176,12 @@ public class HeavyHit : PlayerState
         base.Enter();
         Debug.Log("Heavy Hit");
         playerStateManager.PlayAnimation(PlayerStateManager.AnimationState.HeavyHit);
-        player.DealDamageHeavy();
+       
     }
     public override void Leave()
     {
         base.Leave();
-
+        playerStateManager.heavyHitDamage = playerStateManager.playerLightHitDamage;
     }
 
 }
@@ -182,7 +189,7 @@ public class HeavyHit : PlayerState
 public class StartBlocking : PlayerState
 {
     public float timer;
-    public StartBlocking(PlayerStateManager theGameStateManager, Player thePlayer) : base(theGameStateManager, thePlayer)
+    public StartBlocking(PlayerStateManager theGameStateManager) : base(theGameStateManager)
     {
 
     }
@@ -192,7 +199,7 @@ public class StartBlocking : PlayerState
         timer += Time.deltaTime;
         if (timer >= playerStateManager.DelayBeforeDeflect)
         {
-            playerStateManager.ChangeState(new Deflect(playerStateManager, player));
+            playerStateManager.ChangeState(new Deflect(playerStateManager));
         }
 
 
@@ -216,7 +223,7 @@ public class StartBlocking : PlayerState
 public class Deflect : PlayerState
 {
     public float timer;
-    public Deflect(PlayerStateManager theGameStateManager, Player thePlayer) : base(theGameStateManager, thePlayer)
+    public Deflect(PlayerStateManager theGameStateManager) : base(theGameStateManager)
     {
 
     }
@@ -224,13 +231,14 @@ public class Deflect : PlayerState
     public override void StateBehavior()
     {
         timer += Time.deltaTime;
-        if (!Input.GetKey(playerStateManager.blockKey))
+        playerStateManager.swordGlowAmount = 1.7f;
+        if (!Input.GetButton("block"))
         {
-            playerStateManager.ChangeState(new BlockRecover(playerStateManager, player));
+            playerStateManager.ChangeState(new BlockRecover(playerStateManager));
         }
         if (timer >= playerStateManager.PerfectDeflectWindow)
         {
-            playerStateManager.ChangeState(new Blocking(playerStateManager, player));
+            playerStateManager.ChangeState(new Blocking(playerStateManager));
         }
 
 
@@ -241,16 +249,12 @@ public class Deflect : PlayerState
         base.Enter();
         Debug.Log("Deflect");
         timer = 0;
-        player.isDeflecting = true;
+        playerStateManager.swordGlowAmount = 1.7f;
     }
     public override void Leave()
     {
         base.Leave();
-
-        player.isDeflecting = false;
-
-        if(player.perfectDeflect)
-            player.perfectDeflect = false;
+        playerStateManager.swordGlowAmount = 1.1f;
 
     }
 
@@ -259,16 +263,16 @@ public class Deflect : PlayerState
 public class Blocking : PlayerState
 {
     
-    public Blocking(PlayerStateManager theGameStateManager, Player thePlayer) : base(theGameStateManager, thePlayer)
+    public Blocking(PlayerStateManager theGameStateManager) : base(theGameStateManager)
     {
 
     }
 
     public override void StateBehavior()
     {
-        if (!Input.GetKey(playerStateManager.blockKey))
+        if (!Input.GetButton("block"))
         {
-            playerStateManager.ChangeState(new BlockRecover(playerStateManager, player));
+            playerStateManager.ChangeState(new BlockRecover(playerStateManager));
         }
         Debug.Log("blocking");
 
@@ -278,13 +282,13 @@ public class Blocking : PlayerState
     {
         base.Enter();
         playerStateManager.PlayAnimation(PlayerStateManager.AnimationState.Block);
-        player.isBlocking = true;
+        
 
     }
     public override void Leave()
     {
         base.Leave();
-        player.isBlocking = false;
+        
 
     }
 
@@ -293,7 +297,7 @@ public class Blocking : PlayerState
 public class BlockRecover : PlayerState
 {
     public float timer;
-    public BlockRecover(PlayerStateManager theGameStateManager, Player thePlayer) : base(theGameStateManager, thePlayer)
+    public BlockRecover(PlayerStateManager theGameStateManager) : base(theGameStateManager)
     {
 
     }
@@ -304,7 +308,7 @@ public class BlockRecover : PlayerState
 
         if (timer > playerStateManager.BlockRecover)
         {
-            playerStateManager.ChangeState(new Idle(playerStateManager, player));
+            playerStateManager.ChangeState(new Idle(playerStateManager));
         }
         timer += Time.deltaTime;
     }
@@ -327,7 +331,7 @@ public class BlockRecover : PlayerState
 public class ReadyToRoll : PlayerState
 {
     public float timer;
-    public ReadyToRoll(PlayerStateManager theGameStateManager, Player thePlayer) : base(theGameStateManager, thePlayer)
+    public ReadyToRoll(PlayerStateManager theGameStateManager) : base(theGameStateManager)
     {
 
     }
@@ -335,14 +339,14 @@ public class ReadyToRoll : PlayerState
     public override void StateBehavior()
     {
         timer += Time.deltaTime;
-        if (Input.GetKeyUp(playerStateManager.dodgeKey))
+        if (Input.GetButtonUp("dodge"))
         {
-            playerStateManager.ChangeState(new Shuffle(playerStateManager, player));
+            playerStateManager.ChangeState(new Shuffle(playerStateManager));
         }
         else if (timer >= playerStateManager.SecondsBeforeStartRolling)
         {
-            player.Dodge(player.FindTargetLocation());
-            playerStateManager.ChangeState(new Roll(playerStateManager, player));
+            
+            playerStateManager.ChangeState(new Roll(playerStateManager));
         }
     }
 
@@ -361,15 +365,21 @@ public class ReadyToRoll : PlayerState
 
 public class Roll : PlayerState
 {
-
-    public Roll(PlayerStateManager theGameStateManager, Player thePlayer) : base(theGameStateManager, thePlayer)
+    float timer = 0;
+    public Roll(PlayerStateManager theGameStateManager) : base(theGameStateManager)
     {
 
     }
 
     public override void StateBehavior()
     {
-
+        playerStateManager.MoveTransform(timer/playerStateManager.RollTime, playerStateManager.previousLoc,playerStateManager.currentLoc);
+        if (timer >= playerStateManager.RollTime)
+        {
+            //flipSprite
+            playerStateManager.ChangeState(new Idle(playerStateManager));
+        }
+        timer += Time.deltaTime;
     }
 
     public override void Enter()
@@ -377,6 +387,96 @@ public class Roll : PlayerState
         base.Enter();
         Debug.Log("Roll");
         playerStateManager.PlayAnimation(PlayerStateManager.AnimationState.Roll);
+        //playerStateManager.ScreenShake(0.1f,0.1f,0);
+        if (playerStateManager.currentLoc == playerStateManager.locA)
+        {
+
+            playerStateManager.previousLoc = playerStateManager.currentLoc;
+            playerStateManager.currentLoc = playerStateManager.locB;
+
+        }
+        else if (playerStateManager.currentLoc == playerStateManager.locB)
+        {
+
+            playerStateManager.previousLoc = playerStateManager.currentLoc;
+            playerStateManager.currentLoc = playerStateManager.locA;
+
+        }
+        else if (playerStateManager.currentLoc == playerStateManager.locC)
+        {
+
+            playerStateManager.previousLoc = playerStateManager.currentLoc;
+            playerStateManager.currentLoc = playerStateManager.locD;
+
+        }
+        else if (playerStateManager.currentLoc == playerStateManager.locD)
+        {
+
+            playerStateManager.previousLoc = playerStateManager.currentLoc;
+            playerStateManager.currentLoc = playerStateManager.locC;
+
+        }
+    }
+    public override void Leave()
+    {
+        base.Leave();
+        playerStateManager.flip();
+    }
+
+}
+
+public class Shuffle : PlayerState
+{
+    float timer = 0;
+    public Shuffle(PlayerStateManager theGameStateManager) : base(theGameStateManager)
+    {
+
+    }
+
+    public override void StateBehavior()
+    {
+        playerStateManager.MoveTransform(timer / playerStateManager.RollTime, playerStateManager.previousLoc, playerStateManager.currentLoc);
+        if (timer >= playerStateManager.RollTime)
+        {
+            //flipSprite
+            playerStateManager.ChangeState(new Idle(playerStateManager));
+        }
+        timer += Time.deltaTime;
+    }
+
+    public override void Enter()
+    {
+        base.Enter();
+        Debug.Log("Shuffle");
+        playerStateManager.PlayAnimation(PlayerStateManager.AnimationState.Shuffle);
+        if (playerStateManager.currentLoc == playerStateManager.locA)
+        {
+
+            playerStateManager.previousLoc = playerStateManager.currentLoc;
+            playerStateManager.currentLoc = playerStateManager.locC;
+
+        }
+        else if (playerStateManager.currentLoc == playerStateManager.locB)
+        {
+
+            playerStateManager.previousLoc = playerStateManager.currentLoc;
+            playerStateManager.currentLoc = playerStateManager.locD;
+
+        }
+        else if (playerStateManager.currentLoc == playerStateManager.locC)
+        {
+
+            playerStateManager.previousLoc = playerStateManager.currentLoc;
+            playerStateManager.currentLoc = playerStateManager.locA;
+
+        }
+        else if (playerStateManager.currentLoc == playerStateManager.locD)
+        {
+
+            playerStateManager.previousLoc = playerStateManager.currentLoc;
+            playerStateManager.currentLoc = playerStateManager.locB;
+
+        }
     }
     public override void Leave()
     {
@@ -386,29 +486,32 @@ public class Roll : PlayerState
 
 }
 
-public class Shuffle : PlayerState
+public class Stun : PlayerState
 {
-
-    public Shuffle(PlayerStateManager theGameStateManager, Player thePlayer) : base(theGameStateManager, thePlayer)
+    float timer = 0;
+    public Stun(PlayerStateManager theGameStateManager) : base(theGameStateManager)
     {
 
     }
-
     public override void StateBehavior()
     {
-
+        if (timer > playerStateManager.GetHitStunDuration)
+        {
+            playerStateManager.ChangeState(new Idle(playerStateManager));
+        }
+        timer += Time.deltaTime;
     }
 
     public override void Enter()
     {
         base.Enter();
-        Debug.Log("Shuffle");
-        playerStateManager.ChangeState(new Idle(playerStateManager, player));
+        //play stun animation
+        playerStateManager.PlayAnimation(PlayerStateManager.AnimationState.Stun);
+        playerStateManager.characterMaterial.SetFloat("_getHit", 1);
     }
     public override void Leave()
     {
         base.Leave();
-
+        playerStateManager.characterMaterial.SetFloat("_getHit", 0);
     }
-
 }
