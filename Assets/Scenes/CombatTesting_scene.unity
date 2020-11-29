@@ -801,6 +801,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f4bdc02b360dc894a82ec8d1826f2ad1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerStateManager: {fileID: 4976025380542783347}
   sp: {fileID: 0}
   NumAttacks: 4
   targets: []
@@ -6064,7 +6065,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 70b75d8b3ac737342827ef2d559f374e, type: 3}
+  m_Sprite: {fileID: 21300000, guid: f4e49a4f15c312147a112ecccd77f262, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 0.5019608}
   m_FlipX: 0
   m_FlipY: 0
@@ -8059,7 +8060,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
+  - {fileID: 2100000, guid: 8975b14dafd6b11438123ec991b21fd5, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -8080,8 +8081,8 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 704fbddbadb74024da9a68aba08370f6, type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Sprite: {fileID: 21300000, guid: 31bea2b8a6e3e2c48a110bf245a17a3a, type: 3}
+  m_Color: {r: 0.8235295, g: 1, b: 0.7725491, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -8103,6 +8104,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7a646f23f57f42b4bb76055d2f70ad1e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  characterMaterial: {fileID: 0}
+  swordGlowAmount: 1.1
   PlayerTransform: {fileID: 1545828431}
   Spark: {fileID: 487215863}
   ImpactRing: {fileID: 2013611582}
@@ -8115,8 +8118,10 @@ MonoBehaviour:
   currentLoc: {fileID: 0}
   previousLoc: {fileID: 0}
   mainCharacterAnimation: {fileID: 8199908073459545716}
+  heavyHitDamage: 0
   playerFullHealth: 100
   playerLightHitDamage: 3
+  playerHeavyHitDamageIncreasePerSecond: 5
   hitKey: 113
   dodgeKey: 119
   blockKey: 101
@@ -8128,13 +8133,13 @@ MonoBehaviour:
   hitPauseDuration: 0.2
   lightAttackScreenShakeDuration: 0.1
   lightAttackScreenShakeMagnitude: 0.2
-  DelayBeforeDeflect: 0.1
+  DelayBeforeDeflect: 0.05
   PerfectDeflectWindow: 0.5
   BlockRecover: 0.3
   BlockDamagePercentage: 0.5
   SecondsBeforeStartRolling: 0.1
-  RollTime: 0.5
-  GetHitStunDuration: 0.2
+  RollTime: 0.3
+  GetHitStunDuration: 0.8
 --- !u!1 &5442009930585662590
 GameObject:
   m_ObjectHideFlags: 0

@@ -20,11 +20,13 @@ AnimationClip:
   m_PPtrCurves:
   - curve:
     - time: 0
-      value: {fileID: 21300000, guid: b27c54a411e0f7b4483b7088d967be94, type: 3}
-    - time: 0.25
-      value: {fileID: 21300000, guid: 704fbddbadb74024da9a68aba08370f6, type: 3}
-    - time: 0.5
-      value: {fileID: 21300000, guid: 704fbddbadb74024da9a68aba08370f6, type: 3}
+      value: {fileID: 21300000, guid: a77019a37e5a21e42b38511fad867e72, type: 3}
+    - time: 0.1
+      value: {fileID: 21300000, guid: 93a83e18e83ea394aabb50c0bc5d2fd6, type: 3}
+    - time: 0.21666667
+      value: {fileID: 21300000, guid: 96e7d068a5a5c9943bbcd4903dcd5361, type: 3}
+    - time: 0.33333334
+      value: {fileID: 21300000, guid: a19e989ad7281914290c41a9b6d33192, type: 3}
     attribute: m_Sprite
     path: 
     classID: 212
@@ -44,15 +46,16 @@ AnimationClip:
       customType: 23
       isPPtrCurve: 1
     pptrCurveMapping:
-    - {fileID: 21300000, guid: b27c54a411e0f7b4483b7088d967be94, type: 3}
-    - {fileID: 21300000, guid: 704fbddbadb74024da9a68aba08370f6, type: 3}
-    - {fileID: 21300000, guid: 704fbddbadb74024da9a68aba08370f6, type: 3}
+    - {fileID: 21300000, guid: a77019a37e5a21e42b38511fad867e72, type: 3}
+    - {fileID: 21300000, guid: 93a83e18e83ea394aabb50c0bc5d2fd6, type: 3}
+    - {fileID: 21300000, guid: 96e7d068a5a5c9943bbcd4903dcd5361, type: 3}
+    - {fileID: 21300000, guid: a19e989ad7281914290c41a9b6d33192, type: 3}
   m_AnimationClipSettings:
     serializedVersion: 2
     m_AdditiveReferencePoseClip: {fileID: 0}
     m_AdditiveReferencePoseTime: 0
     m_StartTime: 0
-    m_StopTime: 0.51666665
+    m_StopTime: 0.41666666
     m_OrientationOffsetY: 0
     m_Level: 0
     m_CycleOffset: 0
@@ -72,7 +75,14 @@ AnimationClip:
   m_HasGenericRootTransform: 0
   m_HasMotionFloatCurves: 0
   m_Events:
-  - time: 0.5
+  - time: 0.23333333
+    functionName: HeavyAttack
+    data: 
+    objectReferenceParameter: {fileID: 0}
+    floatParameter: 0
+    intParameter: 0
+    messageOptions: 0
+  - time: 0.41666666
     functionName: ChangeToIdle
     data: 
     objectReferenceParameter: {fileID: 0}
