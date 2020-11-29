@@ -1,5 +1,4 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class CRT_StateManager : MonoBehaviour
@@ -40,7 +39,9 @@ public class CRT_StateManager : MonoBehaviour
     public CRT_State[][] MovesList_2;
     public CRT_State[][] MovesList_3;
 
-
+    public enum AnimationState { CRT_Idle, CRT_Single_Front, CRT_Single_Back, CRT_Double_Front, CRT_Double_Back, CRT_Double_Vertical, CRT_AllAttack, CRT_Stun, CRT_Dead };
+    private AnimationState currentAnimationState;
+    public Animator myBossAnimator;
 
     [HideInInspector]
     public bool comboActive;
@@ -84,14 +85,22 @@ public class CRT_StateManager : MonoBehaviour
         Combo_7 = new CRT_State[] { DoubleAttack_ver, SingleAttack_quick, SingleAttack_quick, DoubleAttack_hoz, SingleAttack_long, SingleAttack_quick };
         Combo_8 = new CRT_State[] { AllAttack_simul, SingleAttack_long, SingleAttack_quick, SingleAttack_quick, DoubleAttack_hoz };
 
+        /*
         // PHASE 1: MOVE LIST
         MovesList_1 = new CRT_State[][] { Attack_1, Attack_2_v, Combo_1, Combo_2 };
         // PHASE 2: MOVE LIST
         MovesList_2 = new CRT_State[][] { Attack_3, Combo_1, Combo_2, Combo_3, Combo_4 };
         // PHASE 2: MOVE LIST
-        MovesList_3 = new CRT_State[][] { Combo_4, Combo_5, Combo_6, Combo_7, Combo_8 };
+        MovesList_3 = new CRT_State[][] { Combo_4, Combo_5, Combo_6, Combo_7, Combo_8 };*/
+
+        MovesList_1 = new CRT_State[][] { Attack_1 };
+        // PHASE 2: MOVE LIST
+        MovesList_2 = new CRT_State[][] { Attack_1 };
+        // PHASE 2: MOVE LIST
+        MovesList_3 = new CRT_State[][] { Attack_1 };
 
         ChangeState(Idle); // Starting state is idle
+        currentAnimationState = AnimationState.CRT_Idle;
     }
 
     private void Update()
@@ -102,15 +111,6 @@ public class CRT_StateManager : MonoBehaviour
         {
             StopCombo();
             ChangeState(Dead);
-        }
-
-        if (player.perfectDeflect)
-        {
-            if (comboActive)
-            {
-                StopCombo();
-                ChangeState(Stunned);
-            }
         }
     }
 
@@ -142,7 +142,7 @@ public class CRT_StateManager : MonoBehaviour
         foreach (CRT_State state in attacks)
         {
             CRT_State S = attacks[comboStep];
-
+            //PlayAnimation(AnimationState.CRT_Single_Back);
             comboNextState = S;
             ChangeState(PrepareAttack); // Take Aim
             yield return new WaitForSeconds(S.GetPrepDuration());
@@ -152,8 +152,65 @@ public class CRT_StateManager : MonoBehaviour
             ChangeState(ComboState);
             yield return new WaitForSeconds(ComboState.GetPrevious().GetCooldown());
             comboStep++;
+
+            //
+
+            //Prepare, S, BackToIdle
         }
         ChangeState(Idle);
         comboActive = false;
+    }
+
+    public void EndAttack()
+    {
+        if (comboActive)
+            ChangeState(ComboState);
+        else
+            ChangeState(Idle);
+    }
+
+    public void DetermineAnimation(string name)
+    {
+        switch (name)
+        {
+            case "Single":
+                if(Boss.targets[0].isUp)
+                    PlayAnimation(AnimationState.CRT_Single_Back);
+                else
+                    PlayAnimation(AnimationState.CRT_Single_Back);
+                break;
+
+            case "DoubleHoz":
+                if (Boss.targets[0].isUp)
+                    PlayAnimation(AnimationState.CRT_Double_Back);
+                else
+                    PlayAnimation(AnimationState.CRT_Double_Front);
+                break;
+
+            case "DoubleVer":
+                PlayAnimation(AnimationState.CRT_Double_Vertical);
+                break;
+
+            case "AllSimul":
+                PlayAnimation(AnimationState.CRT_AllAttack);
+                break;
+
+            case "Idle":
+                PlayAnimation(AnimationState.CRT_Idle);
+                break;
+
+            default:
+                //PlayAnimation(AnimationState.CRT_Idle);
+                break;
+        }
+    }
+
+    public void PlayAnimation(AnimationState animationState)
+    {
+        if (currentAnimationState != animationState)
+        {
+            myBossAnimator.Play(animationState.ToString());
+            currentAnimationState = animationState;
+        }
     }
 }

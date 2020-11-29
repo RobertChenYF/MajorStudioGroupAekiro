@@ -27,8 +27,9 @@ public class CRT_State_Idle : CRT_State
 
     public override void Enter()
     {
-        Boss.sp.color = Color.cyan;
+        SM.DetermineAnimation(this.GetName());
 
+        Boss.sp.color = Color.cyan;
         t = 0;
 
         Boss.ClearTargets();

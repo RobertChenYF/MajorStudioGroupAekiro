@@ -11,7 +11,9 @@ public class Tank_Boss : MonoBehaviour
     [HideInInspector]
     public List<Location> targets;
     [HideInInspector]
-    public Temp_Player player;
+    public Player player;
+
+    Tank_StateManager Manager;
 
     public bool isUp;
     public Location[] PlayerLocations;
@@ -26,6 +28,10 @@ public class Tank_Boss : MonoBehaviour
 
     [Header("Attributes")]
     public float CollisionRange = 1f;
+    public float StunDuration = 2f;
+    public int MaxHealth = 50;
+    public int health;
+    public bool CanBeAttacked;
 
     [Header("IDLE")]
     public float TimeBetweenAttacks_1 = 2.5f;
@@ -97,7 +103,8 @@ public class Tank_Boss : MonoBehaviour
     {
         sp = this.GetComponent<SpriteRenderer>();
         rb = this.GetComponent<Rigidbody2D>();
-        player = FindObjectOfType<Temp_Player>();
+        Manager = this.GetComponent<Tank_StateManager>();
+        player = FindObjectOfType<Player>();
         pLocA = PlayerLocations[0];
         pLocB = PlayerLocations[1];
         pLocC = PlayerLocations[2];
@@ -107,6 +114,14 @@ public class Tank_Boss : MonoBehaviour
 
         DriveSpeed = DriveSpeed_1;
         DriveOffDelay = DriveOffDelay_1;
+
+        health = MaxHealth;
+    }
+
+    public void GetStunned()
+    {
+        Manager.ChangeState(Manager.Stunned);
+
     }
 
     public bool GetPlayerIsUp()
@@ -130,6 +145,36 @@ public class Tank_Boss : MonoBehaviour
             isUp = true;
         else
             isUp = false;
+
+
+        if (player.currentLoc == player.locA)
+        {
+            if (currentBossLocation == BossLocA || currentBossLocation == BossLocAB)
+                CanBeAttacked = true;
+            else
+                CanBeAttacked = false;
+        }
+        else if (player.currentLoc == player.locB)
+        {
+            if (currentBossLocation == BossLocB || currentBossLocation == BossLocAB)
+                CanBeAttacked = true;
+            else
+                CanBeAttacked = false;
+        }
+        else if (player.currentLoc == player.locC)
+        {
+            if (currentBossLocation == BossLocC || currentBossLocation == BossLocCD)
+                CanBeAttacked = true;
+            else
+                CanBeAttacked = false;
+        }
+        else if (player.currentLoc == player.locD)
+        {
+            if (currentBossLocation == BossLocD || currentBossLocation == BossLocCD)
+                CanBeAttacked = true;
+            else
+                CanBeAttacked = false;
+        }
     }
 
     public bool CheckCanMortar()

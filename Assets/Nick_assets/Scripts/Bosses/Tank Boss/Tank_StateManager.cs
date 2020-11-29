@@ -25,6 +25,8 @@ public class Tank_StateManager : MonoBehaviour
     public Tank_State ShootMortar_1;
     public Tank_State ShootMortar_2;
     public Tank_State ShootOil_1;
+
+    public Tank_State Stunned;
     //public Tank_State Dead;
 
     public Tank_State[] Attack_1;
@@ -62,13 +64,13 @@ public class Tank_StateManager : MonoBehaviour
         ShootMortar_1 = new Tank_State_ShootMortar(Main_SM, Boss, "Mortar_1", Boss.MortarPrepDuration, Boss.MortarTimeBtwnShot, Boss.MortarRetDuration, 1);
         ShootMortar_2 = new Tank_State_ShootMortar(Main_SM, Boss, "Mortar_2", Boss.MortarPrepDuration, Boss.MortarTimeBtwnShot, Boss.MortarRetDuration, 2);
         ShootOil_1 = new Tank_State_ShootOil(Main_SM, Boss, "Oil_1", Boss.OilPrepDur, Boss.OilHitDuration, Boss.OilRetDur, 1);
-
+        Stunned = new Tank_State_Stunned(Main_SM, Boss, "Stunned", Boss.StunDuration);
 
 
         Attack_1 = new Tank_State[] { AttackJumpSingle };
         MoveList_1 = new Tank_State[][] { Attack_1 };
 
-        attackStateList = new Tank_State[] { ShootOil_1 };
+        attackStateList = new Tank_State[] { Reposition };
         //attackStateList = new Tank_State[] { ShootGunTriple, ShootGunSingle, DriveBy, AttackJumpSingle, AttackJumpTriple, Reposition };
 
         ChangeState(Idle);

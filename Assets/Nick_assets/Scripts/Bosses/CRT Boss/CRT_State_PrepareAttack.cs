@@ -121,6 +121,7 @@ public class CRT_State_PrepareAttack : CRT_State
         //Duration = DetermineDuration(AttackToPerform); // Determine duration of the current attack
         Boss.targets = DetermineTargets(AttackToPerform, playerLoc); // Determine the target locations based on the current attack
         Boss.TargetLocations(); // Target (visually indicate - yellow) those locations
+        SM.DetermineAnimation(AttackToPerform.GetName());
     }
 
     public override void Leave()

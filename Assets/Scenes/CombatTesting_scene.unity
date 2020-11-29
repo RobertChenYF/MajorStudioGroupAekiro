@@ -485,12 +485,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6699737fca91f494586a24ddc606c5df, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  damage: 10
   sp: {fileID: 1525400653}
-  isOccupied: 0
+  MortarTargetIndicator: {fileID: 0}
+  OilTargetIndicator: {fileID: 0}
   isTargeted: 0
   isHit: 0
+  isTargetMortar: 0
+  canBeHitDrive: 1
   isUp: 0
   isRight: 0
+  isOccupied: 0
+  OccupiedByBoss: 0
+  isOiled: 0
+  fireDelay: 0.5
+  fireDur: 0.5
+  OilDuration: 2
 --- !u!1 &412367569
 GameObject:
   m_ObjectHideFlags: 0
@@ -786,6 +796,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ad8460f04471486488334ed0d459a4d5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  myBossAnimator: {fileID: 458715480}
   comboActive: 0
   comboStep: 0
   comboLength: 0
@@ -6235,12 +6246,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6699737fca91f494586a24ddc606c5df, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  damage: 10
   sp: {fileID: 1275394399}
-  isOccupied: 0
+  MortarTargetIndicator: {fileID: 0}
+  OilTargetIndicator: {fileID: 0}
   isTargeted: 0
   isHit: 0
+  isTargetMortar: 0
+  canBeHitDrive: 1
   isUp: 1
   isRight: 0
+  isOccupied: 0
+  OccupiedByBoss: 0
+  isOiled: 0
+  fireDelay: 0.5
+  fireDur: 0.5
+  OilDuration: 2
 --- !u!1 &1137865233
 GameObject:
   m_ObjectHideFlags: 0
@@ -7481,12 +7502,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6699737fca91f494586a24ddc606c5df, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  damage: 10
   sp: {fileID: 1474524066}
-  isOccupied: 0
+  MortarTargetIndicator: {fileID: 0}
+  OilTargetIndicator: {fileID: 0}
   isTargeted: 0
   isHit: 0
+  isTargetMortar: 0
+  canBeHitDrive: 1
   isUp: 0
   isRight: 1
+  isOccupied: 0
+  OccupiedByBoss: 0
+  isOiled: 0
+  fireDelay: 0.5
+  fireDur: 0.5
+  OilDuration: 2
 --- !u!1 &1813932852
 GameObject:
   m_ObjectHideFlags: 0
@@ -7584,12 +7615,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6699737fca91f494586a24ddc606c5df, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  damage: 10
   sp: {fileID: 1411097996}
-  isOccupied: 0
+  MortarTargetIndicator: {fileID: 0}
+  OilTargetIndicator: {fileID: 0}
   isTargeted: 0
   isHit: 0
+  isTargetMortar: 0
+  canBeHitDrive: 1
   isUp: 1
   isRight: 1
+  isOccupied: 0
+  OccupiedByBoss: 0
+  isOiled: 0
+  fireDelay: 0.5
+  fireDur: 0.5
+  OilDuration: 2
 --- !u!1 &1880191467
 GameObject:
   m_ObjectHideFlags: 0
@@ -8027,6 +8068,7 @@ MonoBehaviour:
   isRight: 0
   isUp: 0
   active: 1
+  currentLoc: {fileID: 0}
 --- !u!4 &1164705803971200033
 Transform:
   m_ObjectHideFlags: 0
@@ -8104,12 +8146,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7a646f23f57f42b4bb76055d2f70ad1e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  BossSpriteRenderer: {fileID: 458715476}
   characterMaterial: {fileID: 0}
   swordGlowAmount: 1.1
   PlayerTransform: {fileID: 1545828431}
   Spark: {fileID: 487215863}
   ImpactRing: {fileID: 2013611582}
-  Boss: {fileID: 458715479}
+  Boss1: {fileID: 458715479}
+  Boss2: {fileID: 0}
   playerHealthBar: {fileID: 1527123129}
   locA: {fileID: 356256775}
   locB: {fileID: 1713635499}
@@ -8118,6 +8162,7 @@ MonoBehaviour:
   currentLoc: {fileID: 0}
   previousLoc: {fileID: 0}
   mainCharacterAnimation: {fileID: 8199908073459545716}
+  BossAnimation: {fileID: 458715480}
   heavyHitDamage: 0
   playerFullHealth: 100
   playerLightHitDamage: 3
@@ -8140,6 +8185,7 @@ MonoBehaviour:
   SecondsBeforeStartRolling: 0.1
   RollTime: 0.3
   GetHitStunDuration: 0.8
+  isDodging: 0
 --- !u!1 &5442009930585662590
 GameObject:
   m_ObjectHideFlags: 0

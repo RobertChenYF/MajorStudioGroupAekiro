@@ -365,6 +365,7 @@ public class ReadyToRoll : PlayerState
 
 public class Roll : PlayerState
 {
+    bool shouldFlip;
     float timer = 0;
     public Roll(PlayerStateManager theGameStateManager) : base(theGameStateManager)
     {
@@ -386,6 +387,8 @@ public class Roll : PlayerState
     {
         base.Enter();
         Debug.Log("Roll");
+        playerStateManager.isDodging = true;
+
         playerStateManager.PlayAnimation(PlayerStateManager.AnimationState.Roll);
         //playerStateManager.ScreenShake(0.1f,0.1f,0);
         if (playerStateManager.currentLoc == playerStateManager.locA)
@@ -394,6 +397,11 @@ public class Roll : PlayerState
             playerStateManager.previousLoc = playerStateManager.currentLoc;
             playerStateManager.currentLoc = playerStateManager.locB;
 
+            if (playerStateManager.lookingRight)
+                shouldFlip = false;
+            else
+                shouldFlip = true;
+
         }
         else if (playerStateManager.currentLoc == playerStateManager.locB)
         {
@@ -401,6 +409,10 @@ public class Roll : PlayerState
             playerStateManager.previousLoc = playerStateManager.currentLoc;
             playerStateManager.currentLoc = playerStateManager.locA;
 
+            if (playerStateManager.lookingRight)
+                shouldFlip = true;
+            else
+                shouldFlip = false;
         }
         else if (playerStateManager.currentLoc == playerStateManager.locC)
         {
@@ -408,6 +420,10 @@ public class Roll : PlayerState
             playerStateManager.previousLoc = playerStateManager.currentLoc;
             playerStateManager.currentLoc = playerStateManager.locD;
 
+            if (playerStateManager.lookingRight)
+                shouldFlip = false;
+            else
+                shouldFlip = true;
         }
         else if (playerStateManager.currentLoc == playerStateManager.locD)
         {
@@ -415,12 +431,23 @@ public class Roll : PlayerState
             playerStateManager.previousLoc = playerStateManager.currentLoc;
             playerStateManager.currentLoc = playerStateManager.locC;
 
+            if (playerStateManager.lookingRight)
+                shouldFlip = true;
+            else
+                shouldFlip = false;
         }
+
+        if(shouldFlip)
+            playerStateManager.flip();
     }
     public override void Leave()
     {
         base.Leave();
-        playerStateManager.flip();
+
+        if (shouldFlip)
+            playerStateManager.flip();
+        playerStateManager.isDodging = false;
+
     }
 
 }
@@ -448,6 +475,7 @@ public class Shuffle : PlayerState
     {
         base.Enter();
         Debug.Log("Shuffle");
+        playerStateManager.isDodging = true;
         playerStateManager.PlayAnimation(PlayerStateManager.AnimationState.Shuffle);
         if (playerStateManager.currentLoc == playerStateManager.locA)
         {
@@ -481,6 +509,8 @@ public class Shuffle : PlayerState
     public override void Leave()
     {
         base.Leave();
+        playerStateManager.isDodging = false;
+
 
     }
 

@@ -7,6 +7,8 @@ public class CRT_Boss : MonoBehaviour
 
     public PlayerStateManager playerStateManager;
 
+    CRT_StateManager Manager;
+
     [HideInInspector]
     public SpriteRenderer sp;
     [HideInInspector]
@@ -71,6 +73,7 @@ public class CRT_Boss : MonoBehaviour
     private void Awake()
     {
         sp = this.GetComponent<SpriteRenderer>();
+        Manager = this.GetComponent<CRT_StateManager>();
        
         health = MaxHealth;
 
@@ -89,6 +92,15 @@ public class CRT_Boss : MonoBehaviour
             CurrentPhase = 3;
         else
             isAlive = false;
+    }
+
+    public void GetStunned()
+    {
+        if (Manager.comboActive)
+        {
+            Manager.StopCombo();
+            Manager.ChangeState(Manager.Stunned);
+        }
     }
 
     public void TargetLocations()
