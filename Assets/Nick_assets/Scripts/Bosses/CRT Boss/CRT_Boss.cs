@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class CRT_Boss : MonoBehaviour
 {
-    
 
+    public PlayerStateManager playerStateManager;
 
     [HideInInspector]
     public SpriteRenderer sp;
@@ -104,6 +104,8 @@ public class CRT_Boss : MonoBehaviour
         foreach (Location l in targets)
         {
             l.Hit();
+            //get hit function
+            playerStateManager.getMeleeAttacked(l, 1);
         }
     }
 
@@ -126,6 +128,7 @@ public class CRT_Boss : MonoBehaviour
         foreach (Location l in targets)
         {
             l.Hit();
+            playerStateManager.getMeleeAttacked(l,1);
             yield return new WaitForSeconds(delay);
         }
     }

@@ -57,7 +57,7 @@ Material:
     - _EnableExternalAlpha: 0
     m_Colors:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
-    - _Color11: {r: 5.3403134, g: 3.2712915, b: 0, a: 1}
+    - _Color11: {r: 5.992157, g: 3.6705883, b: 0, a: 1}
     - _EmissionColor: {r: 1, g: 1, b: 1, a: 1}
     - _Flip: {r: 1, g: 1, b: 1, a: 1}
     - _MainColor: {r: 1, g: 1, b: 1, a: 0}

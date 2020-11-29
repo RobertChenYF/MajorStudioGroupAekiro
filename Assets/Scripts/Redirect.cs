@@ -17,4 +17,9 @@ public class Redirect: MonoBehaviour
     {
         MainCharacter.GetComponent<PlayerStateManager>().MeleeAttack(damage);
     }
+
+    public void HeavyAttack()
+    {
+        MainCharacter.GetComponent<PlayerStateManager>().HeavyMeleeAttack();
+    }
 }

@@ -21,7 +21,7 @@ public class Idle : PlayerState
         {
             playerStateManager.ChangeState(new BeforeHitCharge(playerStateManager));
         }
-        else if(Input.GetButton("dodge"))
+        else if(Input.GetButtonDown("dodge"))
         {
             playerStateManager.ChangeState(new ReadyToRoll(playerStateManager));
         }
@@ -93,6 +93,8 @@ public class HitCharge : PlayerState
     public override void StateBehavior()
     {
         chargeTime += Time.deltaTime;
+        playerStateManager.ChargeAttack();
+        //Debug.Log(playerStateManager.heavyHitDamage);
         Debug.Log("charge heavy attack");
         if (Input.GetButtonUp("attack"))
         {
@@ -113,12 +115,13 @@ public class HitCharge : PlayerState
     {
         base.Enter();
         chargeTime = 0;
+        playerStateManager.heavyHitDamage = playerStateManager.playerLightHitDamage;
         playerStateManager.PlayAnimation(PlayerStateManager.AnimationState.ChargeHeavyHit);
     }
     public override void Leave()
     {
         base.Leave();
-
+        
     }
 
 }
@@ -178,7 +181,7 @@ public class HeavyHit : PlayerState
     public override void Leave()
     {
         base.Leave();
-
+        playerStateManager.heavyHitDamage = playerStateManager.playerLightHitDamage;
     }
 
 }
@@ -228,6 +231,7 @@ public class Deflect : PlayerState
     public override void StateBehavior()
     {
         timer += Time.deltaTime;
+        playerStateManager.swordGlowAmount = 1.7f;
         if (!Input.GetButton("block"))
         {
             playerStateManager.ChangeState(new BlockRecover(playerStateManager));
@@ -245,12 +249,12 @@ public class Deflect : PlayerState
         base.Enter();
         Debug.Log("Deflect");
         timer = 0;
-        
+        playerStateManager.swordGlowAmount = 1.7f;
     }
     public override void Leave()
     {
         base.Leave();
-        
+        playerStateManager.swordGlowAmount = 1.1f;
 
     }
 
@@ -444,7 +448,7 @@ public class Shuffle : PlayerState
     {
         base.Enter();
         Debug.Log("Shuffle");
-        playerStateManager.PlayAnimation(PlayerStateManager.AnimationState.Roll);
+        playerStateManager.PlayAnimation(PlayerStateManager.AnimationState.Shuffle);
         if (playerStateManager.currentLoc == playerStateManager.locA)
         {
 
@@ -502,11 +506,12 @@ public class Stun : PlayerState
     {
         base.Enter();
         //play stun animation
-        playerStateManager.PlayAnimation(PlayerStateManager.AnimationState.Idle);
+        playerStateManager.PlayAnimation(PlayerStateManager.AnimationState.Stun);
+        playerStateManager.characterMaterial.SetFloat("_getHit", 1);
     }
     public override void Leave()
     {
         base.Leave();
-
+        playerStateManager.characterMaterial.SetFloat("_getHit", 0);
     }
 }
