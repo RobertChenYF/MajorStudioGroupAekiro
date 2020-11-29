@@ -11,7 +11,9 @@ public abstract class Tank_State
     protected float PrepDuration;
     protected float HitDuration;
     protected float ReturnDuration;
+    protected int NumAttacks;
 
+    // Main Constructor - used for most states
     public Tank_State(Tank_StateManager myManager, Tank_Boss thisBoss, string name, float dur)
     {
         SM = myManager;
@@ -20,7 +22,17 @@ public abstract class Tank_State
         Duration = dur;
     }
 
-    public Tank_State(Tank_StateManager myManager, Tank_Boss thisBoss, string name, float prepDur, float dur, float hitDur, float retDur)
+    public Tank_State(Tank_StateManager myManager, Tank_Boss thisBoss, string name, float dur, float prepDur)
+    {
+        SM = myManager;
+        Boss = thisBoss;
+        Name = name;
+        Duration = dur;
+        PrepDuration = prepDur;
+    }
+
+    // Constructor used for Jump Attack States
+    public Tank_State(Tank_StateManager myManager, Tank_Boss thisBoss, string name, float prepDur, float dur, float hitDur, float retDur, int numAtk)
     {
         SM = myManager;
         Boss = thisBoss;
@@ -29,6 +41,19 @@ public abstract class Tank_State
         PrepDuration = prepDur;
         HitDuration = hitDur;
         ReturnDuration = retDur;
+        NumAttacks = numAtk;
+    }
+
+    // Constructor used for Shoot Gun 
+    public Tank_State(Tank_StateManager myManager, Tank_Boss thisBoss, string name, float prepDur, float hitDur, float retDur, int numAtk)
+    {
+        SM = myManager;
+        Boss = thisBoss;
+        Name = name;
+        PrepDuration = prepDur;
+        HitDuration = hitDur;
+        ReturnDuration = retDur;
+        NumAttacks = numAtk;
     }
 
     public abstract void DoState(); // State Behavior Loop
@@ -52,6 +77,10 @@ public abstract class Tank_State
     public float GetReturnDuration()
     {
         return ReturnDuration;
+    }
+    public int GetNumAttacks()
+    {
+        return NumAttacks;
     }
 
     public virtual void Enter()

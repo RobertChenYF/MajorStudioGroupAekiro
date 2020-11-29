@@ -17,8 +17,15 @@ public class Tank_StateManager : MonoBehaviour
     public Tank_State DriveOn;
     public Tank_State DriveCombo;
     public Tank_State DriveIn;
-    public Tank_State AttackJump;
-    public Tank_State Dead;
+    public Tank_State Reposition;
+    public Tank_State AttackJumpSingle;
+    public Tank_State AttackJumpTriple;
+    public Tank_State ShootGunSingle;
+    public Tank_State ShootGunTriple;
+    public Tank_State ShootMortar_1;
+    public Tank_State ShootMortar_2;
+    public Tank_State ShootOil_1;
+    //public Tank_State Dead;
 
     public Tank_State[] Attack_1;
 
@@ -31,6 +38,8 @@ public class Tank_StateManager : MonoBehaviour
     [HideInInspector]
     public int comboStep, comboLength;
     public Tank_State comboNextState;
+
+    public Tank_State nextAttackState;
 
 
     private void Start()
@@ -45,10 +54,22 @@ public class Tank_StateManager : MonoBehaviour
         DriveOff = new Tank_State_DriveOff(Main_SM, Boss, "DriveOff", 0);
         DriveIn = new Tank_State_DriveIn(Main_SM, Boss, "DriveIn", 0);
         DriveCombo = new Tank_State_DriveCombo(Main_SM, Boss, "DriveCombo", Boss.DriveComboWaitDuration);
-        AttackJump = new Tank_State_AttackJump(Main_SM, Boss, "AttackJump", Boss.JumpPrepDuration, Boss.JumpDuration, Boss.JumpHitDuration, Boss.JumpReturnDuration);
+        Reposition = new Tank_State_Reposition(Main_SM, Boss, "Reposition", Boss.ReposDuration, Boss.ReposPrepDuration);
+        AttackJumpSingle = new Tank_State_AttackJump(Main_SM, Boss, "AttackJump_1", Boss.JumpPrepDuration_S, Boss.JumpDuration_S, Boss.JumpHitDuration_S, Boss.JumpReturnDuration, 1);
+        AttackJumpTriple = new Tank_State_AttackJump(Main_SM, Boss, "AttackJump_3", Boss.JumpPrepDuration_M, Boss.JumpDuration_M, Boss.JumpHitDuration_M, Boss.JumpReturnDuration, 3);
+        ShootGunSingle = new Tank_State_ShootGun(Main_SM, Boss, "ShootGun_1", Boss.GunPrepDuration_S, Boss.GunHitDuration_S, Boss.GunRetDuration_S, 1);
+        ShootGunTriple = new Tank_State_ShootGun(Main_SM, Boss, "ShootGun_3", Boss.GunPrepDuration_M, Boss.GunHitDuration_M, Boss.GunRetDuration_M, 3);
+        ShootMortar_1 = new Tank_State_ShootMortar(Main_SM, Boss, "Mortar_1", Boss.MortarPrepDuration, Boss.MortarTimeBtwnShot, Boss.MortarRetDuration, 1);
+        ShootMortar_2 = new Tank_State_ShootMortar(Main_SM, Boss, "Mortar_2", Boss.MortarPrepDuration, Boss.MortarTimeBtwnShot, Boss.MortarRetDuration, 2);
+        ShootOil_1 = new Tank_State_ShootOil(Main_SM, Boss, "Oil_1", Boss.OilPrepDur, Boss.OilHitDuration, Boss.OilRetDur, 1);
 
-        Attack_1 = new Tank_State[] { AttackJump };
+
+
+        Attack_1 = new Tank_State[] { AttackJumpSingle };
         MoveList_1 = new Tank_State[][] { Attack_1 };
+
+        attackStateList = new Tank_State[] { ShootOil_1 };
+        //attackStateList = new Tank_State[] { ShootGunTriple, ShootGunSingle, DriveBy, AttackJumpSingle, AttackJumpTriple, Reposition };
 
         ChangeState(Idle);
     }

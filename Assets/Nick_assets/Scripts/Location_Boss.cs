@@ -11,6 +11,7 @@ public class Location_Boss : MonoBehaviour
     public bool isUp;
     public bool isOccupied;
     public bool isOffscreen;
+    public string myName;
 
     void Start()
     {
@@ -22,6 +23,11 @@ public class Location_Boss : MonoBehaviour
     void Update()
     {
         
+    }
+
+    public string GetName()
+    {
+        return myName;
     }
 
     public Location[] GetValidLocations()

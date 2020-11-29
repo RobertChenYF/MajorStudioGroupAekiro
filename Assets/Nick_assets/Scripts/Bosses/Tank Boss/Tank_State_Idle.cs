@@ -5,7 +5,7 @@ using UnityEngine;
 public class Tank_State_Idle : Tank_State
 {
     private float t;
-    private Tank_State[][] MoveList;
+    private Tank_State[] MoveList;
 
     public override void DoState()
     {
@@ -16,6 +16,7 @@ public class Tank_State_Idle : Tank_State
         }
         else
         {
+            SM.nextAttackState = MoveList[Random.Range(0, MoveList.Length)];
             SM.ChangeState(SM.Prepare);
 
             /*if (SM.comboActive)
@@ -33,7 +34,7 @@ public class Tank_State_Idle : Tank_State
         Boss.rb.velocity = Vector2.zero;
         t = 0;
 
-        MoveList = SM.MoveList_1;
+        MoveList = SM.attackStateList;
 
     }
 

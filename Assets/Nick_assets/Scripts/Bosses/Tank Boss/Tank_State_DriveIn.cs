@@ -18,24 +18,27 @@ public class Tank_State_DriveIn : Tank_State
 
         Boss.sp.color = Color.green;
         int r = Random.Range(1, 4); // 1 = left, 2 = middle, 3 = right
+        int r2 = Random.Range(0, 2); // 0 = top, else, bot
+
         Location_Boss target;
+        Location_Boss start;
 
         switch (r)
         {
             case 1:
-                if (Boss.isUp)
+                if (r2 == 0)
                     target = Boss.BossLocC;
                 else
                     target = Boss.BossLocA;
                 break;
             case 2:
-                if (Boss.isUp)
+                if (r2 == 0)
                     target = Boss.BossLocCD;
                 else
                     target = Boss.BossLocAB;
                 break;
             case 3:
-                if (Boss.isUp)
+                if (r2 == 0)
                     target = Boss.BossLocD;
                 else
                     target = Boss.BossLocB;
@@ -46,7 +49,22 @@ public class Tank_State_DriveIn : Tank_State
                 break;
         }
 
-        Boss.StartDriveBy(Boss.currentBossLocation, target);
+        if (target.isUp)
+        {
+            if (Boss.isOffLeft)
+                start = Boss.Off_C;
+            else
+                start = Boss.Off_D;
+        }
+        else
+        {
+            if (Boss.isOffLeft)
+                start = Boss.Off_A;
+            else
+                start = Boss.Off_B;
+        }
+
+        Boss.StartDriveBy(start, target);
     }
 
     public override void Leave()

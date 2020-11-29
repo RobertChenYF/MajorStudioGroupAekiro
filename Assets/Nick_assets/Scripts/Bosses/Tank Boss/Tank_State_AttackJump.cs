@@ -28,7 +28,6 @@ public class Tank_State_AttackJump : Tank_State
             {
                 prepPhase = false;
                 jumpPhase = true;
-                Boss.isJumping = true;
                 Boss.sp.color = Color.blue;
             }
             else
@@ -38,21 +37,17 @@ public class Tank_State_AttackJump : Tank_State
                     t1 += Time.deltaTime;
                     // Jumping
                     float lerpRatio = t1 / Duration;
-                    Vector2 positionOffset = Boss.JumpCurve.Evaluate(lerpRatio) * Boss.LerpOffset;
+                    Vector2 positionOffset = Boss.JumpCurve.Evaluate(lerpRatio) * Boss.Jump_LerpOffset;
                     Boss.transform.position = Vector2.Lerp(startPos, targetPos, lerpRatio) + positionOffset;
-
-                    //r1 += Time.deltaTime / Duration;
-
-                    //Boss.transform.position = Vector3.Lerp(startPos, targetPos, r1);
                 }
                 else
                 {
                     if (jumpPhase)
                     {
-                        Boss.transform.position = targetPos; // Naturally hit due to CheckCollision in Boss.Update()
+                        Boss.transform.position = targetPos;
+                        Boss.HitTargets();
                         jumpPhase = false;
                         hitPhase = true;
-                        Boss.isJumping = false;
                         Boss.sp.color = Color.red;
                     }
                     else
@@ -66,31 +61,46 @@ public class Tank_State_AttackJump : Tank_State
                         {
                             if (hitPhase)
                             {
+                                Boss.ClearTargets();
                                 hitPhase = false;
                                 retPhase = true;
                                 Boss.sp.color = Color.green;
                             }
                             else
                             {
-                                if (t3 < ReturnDuration)
+                                // Jump 3 times
+                                if (Boss.JumpAttacksCount < NumAttacks)
                                 {
-                                    t3 += Time.deltaTime;
-                                    // Returning
-                                    r2 += Time.deltaTime / ReturnDuration;
-                                    Boss.transform.position = Vector3.Lerp(targetPos, endPos, r2);
+                                    Boss.JumpAttacksCount++;
+                                    SM.ChangeState(SM.Prepare);
                                 }
                                 else
-                                {
-                                    // Back to Idle
-                                    Boss.transform.position = endPos;
-                                    Boss.currentBossLocation = endLocation;
-                                    SM.ChangeState(SM.Idle);
-                                }
+                                    EndAttack();
+
                             }
                         }
                     }
                 }
             }
+        }
+    }
+
+    private void EndAttack()
+    {
+        if (t3 < ReturnDuration)
+        {
+            t3 += Time.deltaTime;
+            // Returning
+            r2 += Time.deltaTime / ReturnDuration;
+            Boss.transform.position = Vector3.Lerp(targetPos, endPos, r2);
+        }
+        else
+        {
+            // Back to Idle
+            Boss.transform.position = endPos;
+            Boss.currentBossLocation = endLocation;
+            Boss.JumpAttacksCount = 1;
+            SM.ChangeState(SM.Idle);
         }
     }
 
@@ -140,6 +150,6 @@ public class Tank_State_AttackJump : Tank_State
         base.Leave();
     }
 
-    public Tank_State_AttackJump(Tank_StateManager myManager, Tank_Boss myBoss, string myName, float myPrepDur, float myDur, float myHitDur, float myRetDur) : base(myManager, myBoss, myName, myPrepDur, myDur, myHitDur, myRetDur)
+    public Tank_State_AttackJump(Tank_StateManager myManager, Tank_Boss myBoss, string myName, float myPrepDur, float myDur, float myHitDur, float myRetDur, int numAtk) : base(myManager, myBoss, myName, myPrepDur, myDur, myHitDur, myRetDur, numAtk)
     { }
 }
