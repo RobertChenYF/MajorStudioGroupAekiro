@@ -20,7 +20,7 @@ public class Tank_State_ShootGun : Tank_State
                 Boss.HitTargets();
                 prepPhase = false;
                 hitPhase = true;
-                Boss.sp.color = Color.red;
+                //Boss.sp.color = Color.red;
             }
             else
             {
@@ -35,7 +35,7 @@ public class Tank_State_ShootGun : Tank_State
                         Boss.ClearTargets();
                         hitPhase = false;
                         retPhase = true;
-                        Boss.sp.color = Color.green;
+                        //Boss.sp.color = Color.green;
                     }
                     else
                     {
@@ -64,6 +64,7 @@ public class Tank_State_ShootGun : Tank_State
 
     public override void Enter()
     {
+        SM.PlayAnimation(Tank_StateManager.AnimationState.Tank_Shoot);
         prepPhase = true;
         hitPhase = false;
         retPhase = false;

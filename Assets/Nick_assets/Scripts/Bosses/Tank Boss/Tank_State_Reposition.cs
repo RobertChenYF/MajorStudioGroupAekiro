@@ -22,7 +22,7 @@ public class Tank_State_Reposition : Tank_State
             if (prepPhase)
             {
                 prepPhase = false;
-                Boss.sp.color = Color.blue;
+                //Boss.sp.color = Color.blue;
             }
             else
             {
@@ -46,6 +46,9 @@ public class Tank_State_Reposition : Tank_State
 
     public override void Enter()
     {
+        Boss.SetSound(2);
+        Boss.PlaySound();
+        SM.PlayAnimation(Tank_StateManager.AnimationState.Tank_Driving);
         tPrep = 0; t = 0; r = 0;
         prepPhase = true;
 

@@ -15,7 +15,7 @@ public class Tank_State_DriveBy : Tank_State
 
     public override void Enter()
     {
-        Boss.sp.color = Color.green;
+        //Boss.sp.color = Color.green;
 
         Boss.StartDriveBy(Boss.startDriveLoc, Boss.endDriveLoc);
     }

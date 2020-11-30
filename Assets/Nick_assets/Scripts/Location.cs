@@ -6,11 +6,11 @@ public class Location : MonoBehaviour
 {
     PlayerStateManager player;
 
+    public GameObject OilSplash_obj;
     public int damage = 10;
 
     public SpriteRenderer sp;
     public SpriteRenderer MortarTargetIndicator;
-    public SpriteRenderer OilTargetIndicator;
     //[HideInInspector]
     public bool isTargeted, isHit;
     public bool isTargetMortar;
@@ -32,10 +32,9 @@ public class Location : MonoBehaviour
         player = FindObjectOfType<PlayerStateManager>();
 
         sp.color = new Color(1, 1, 1, 0.25f);
-        if (MortarTargetIndicator != null && OilTargetIndicator != null)
+        if (MortarTargetIndicator != null)
         {
             MortarTargetIndicator.enabled = false;
-            OilTargetIndicator.enabled = false;
         }
     }
 
@@ -93,8 +92,8 @@ public class Location : MonoBehaviour
     }
     IEnumerator HitMortarDelay(float delay)
     {
-        Hit();
         ClearTargetMortar();
+        Hit();
         yield return new WaitForSeconds(delay);
         ClearHit();
     }
@@ -116,18 +115,18 @@ public class Location : MonoBehaviour
     public void OilOn()
     {
         isOiled = true;
-        OilTargetIndicator.enabled = true;
+        Vector2 loc = new Vector2(this.transform.position.x, this.transform.position.y - 1);
+        Instantiate(OilSplash_obj, loc, Quaternion.identity);
         StartCoroutine(OilTimer());
     }
     public void ClearOil()
-    {
+    { 
         isOiled = false;
-        OilTargetIndicator.color = Color.black;
-        OilTargetIndicator.enabled = false;
     }
     IEnumerator OilTimer()
     {
         yield return new WaitForSeconds(OilDuration);
+
         if (isOiled && !doFire)
             ClearOil();
     }
@@ -137,11 +136,12 @@ public class Location : MonoBehaviour
         yield return new WaitForSeconds(fireDelay);
         // FIRE
         Hit();
-        OilTargetIndicator.color = Color.yellow;
         yield return new WaitForSeconds(fireDur);
         ClearHit();
         ClearOil();
         doFire = false;
 
     }
+
+
 }
