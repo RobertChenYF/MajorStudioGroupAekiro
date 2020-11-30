@@ -29,6 +29,7 @@ public class Tank_State_AttackJump : Tank_State
                 prepPhase = false;
                 jumpPhase = true;
                 Boss.sp.color = Color.blue;
+                SM.PlayAnimation(Tank_StateManager.AnimationState.Tank_Jump_during);
             }
             else
             {
@@ -49,6 +50,7 @@ public class Tank_State_AttackJump : Tank_State
                         jumpPhase = false;
                         hitPhase = true;
                         Boss.sp.color = Color.red;
+                        SM.PlayAnimation(Tank_StateManager.AnimationState.Tank_Jump_end);
                     }
                     else
                     {
@@ -143,6 +145,8 @@ public class Tank_State_AttackJump : Tank_State
         startPos = Boss.transform.position;
         targetPos = target.transform.position;
         endPos = endLocation.transform.position;
+
+        SM.PlayAnimation(Tank_StateManager.AnimationState.Tank_Jump_start);
 
         if (startPos.x > endPos.x)
             Boss.LookLeft();

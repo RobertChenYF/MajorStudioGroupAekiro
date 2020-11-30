@@ -6,7 +6,7 @@ AnimationClip:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Tank_Idle
+  m_Name: Tank_Jump
   serializedVersion: 6
   m_Legacy: 0
   m_Compressed: 0
@@ -20,7 +20,13 @@ AnimationClip:
   m_PPtrCurves:
   - curve:
     - time: 0
-      value: {fileID: 21300000, guid: 8aa0cfc2bb5853d499c8a4413915f640, type: 3}
+      value: {fileID: 21300000, guid: 8ebdb10652ac3bf48b8b6b6ed8444e3a, type: 3}
+    - time: 0.016666668
+      value: {fileID: 21300000, guid: 6ff981a3ebed7fb4ab749100b005aece, type: 3}
+    - time: 0.033333335
+      value: {fileID: 21300000, guid: f1bba54f04a841d47847dcc04f2cf8d5, type: 3}
+    - time: 3
+      value: {fileID: 21300000, guid: f1bba54f04a841d47847dcc04f2cf8d5, type: 3}
     attribute: m_Sprite
     path: 
     classID: 212
@@ -40,13 +46,16 @@ AnimationClip:
       customType: 23
       isPPtrCurve: 1
     pptrCurveMapping:
-    - {fileID: 21300000, guid: 8aa0cfc2bb5853d499c8a4413915f640, type: 3}
+    - {fileID: 21300000, guid: 8ebdb10652ac3bf48b8b6b6ed8444e3a, type: 3}
+    - {fileID: 21300000, guid: 6ff981a3ebed7fb4ab749100b005aece, type: 3}
+    - {fileID: 21300000, guid: f1bba54f04a841d47847dcc04f2cf8d5, type: 3}
+    - {fileID: 21300000, guid: f1bba54f04a841d47847dcc04f2cf8d5, type: 3}
   m_AnimationClipSettings:
     serializedVersion: 2
     m_AdditiveReferencePoseClip: {fileID: 0}
     m_AdditiveReferencePoseTime: 0
     m_StartTime: 0
-    m_StopTime: 0.016666668
+    m_StopTime: 3.0166667
     m_OrientationOffsetY: 0
     m_Level: 0
     m_CycleOffset: 0

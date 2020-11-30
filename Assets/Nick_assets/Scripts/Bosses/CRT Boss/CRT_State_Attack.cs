@@ -10,22 +10,18 @@ public class CRT_State_Attack : CRT_State
 
     public override void DoState()
     {
-        /*if (isConsecutive)
+        if (timer < 2.5f)
         {
-            if (t < timer) // slight pause
-            {
-                t += Time.deltaTime;
-            }
-            else
-            {
-
-            }
-        }*/
+            timer += Time.deltaTime;
+        }
+        else
+            SM.ChangeState(SM.Idle);
     }
 
     public override void Enter()
     {
         Boss.sp.color = Color.red;
+        timer = 0;
 
         /*if (isConsecutive)
         {

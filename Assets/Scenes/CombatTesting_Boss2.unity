@@ -8196,6 +8196,7 @@ MonoBehaviour:
   comboActive: 0
   comboStep: 0
   comboLength: 0
+  myBossAnimator: {fileID: 1599104319}
 --- !u!114 &1599104317
 MonoBehaviour:
   m_ObjectHideFlags: 0
