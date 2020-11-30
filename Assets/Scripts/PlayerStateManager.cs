@@ -105,7 +105,7 @@ public class PlayerStateManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
+        Debug.Log(canHitBoss);
         if (playerCurrentHealth<=0&&currentPlayerState.ToString() != "Death")
         {
             ChangeState(new Death(this));
