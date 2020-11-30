@@ -20,7 +20,25 @@ AnimationClip:
   m_PPtrCurves:
   - curve:
     - time: 0
-      value: {fileID: 21300000, guid: c7b8b5eb95164594e83254b568b35dde, type: 3}
+      value: {fileID: 21300000, guid: 75c9e38e03482d24aa96e186e9dc5604, type: 3}
+    - time: 0.016666668
+      value: {fileID: 21300000, guid: 0216ead2644dbad4581a5700025ddfd6, type: 3}
+    - time: 0.033333335
+      value: {fileID: 21300000, guid: d576f563bc7db084c91353ee419fc682, type: 3}
+    - time: 0.05
+      value: {fileID: 21300000, guid: 1ee0f8e8ed876bd45bf6f69754d10a6d, type: 3}
+    - time: 0.16666667
+      value: {fileID: 21300000, guid: 297b03f9027ea1d41ad833012fa1eb1d, type: 3}
+    - time: 0.18333334
+      value: {fileID: 21300000, guid: 1a69a9b4b3a29ba4cb4464390c874baa, type: 3}
+    - time: 0.2
+      value: {fileID: 21300000, guid: eacf7b06bcf43da45944db1127981944, type: 3}
+    - time: 0.21666667
+      value: {fileID: 21300000, guid: c56bbd4826baace419704ee2a48bf587, type: 3}
+    - time: 0.23333333
+      value: {fileID: 21300000, guid: afec68ba2f0d98047a6af2ec24a185c6, type: 3}
+    - time: 0.25
+      value: {fileID: 21300000, guid: de52e39fd0cd57f41a2046eb2616f312, type: 3}
     attribute: m_Sprite
     path: 
     classID: 212
@@ -40,13 +58,22 @@ AnimationClip:
       customType: 23
       isPPtrCurve: 1
     pptrCurveMapping:
-    - {fileID: 21300000, guid: c7b8b5eb95164594e83254b568b35dde, type: 3}
+    - {fileID: 21300000, guid: 75c9e38e03482d24aa96e186e9dc5604, type: 3}
+    - {fileID: 21300000, guid: 0216ead2644dbad4581a5700025ddfd6, type: 3}
+    - {fileID: 21300000, guid: d576f563bc7db084c91353ee419fc682, type: 3}
+    - {fileID: 21300000, guid: 1ee0f8e8ed876bd45bf6f69754d10a6d, type: 3}
+    - {fileID: 21300000, guid: 297b03f9027ea1d41ad833012fa1eb1d, type: 3}
+    - {fileID: 21300000, guid: 1a69a9b4b3a29ba4cb4464390c874baa, type: 3}
+    - {fileID: 21300000, guid: eacf7b06bcf43da45944db1127981944, type: 3}
+    - {fileID: 21300000, guid: c56bbd4826baace419704ee2a48bf587, type: 3}
+    - {fileID: 21300000, guid: afec68ba2f0d98047a6af2ec24a185c6, type: 3}
+    - {fileID: 21300000, guid: de52e39fd0cd57f41a2046eb2616f312, type: 3}
   m_AnimationClipSettings:
     serializedVersion: 2
     m_AdditiveReferencePoseClip: {fileID: 0}
     m_AdditiveReferencePoseTime: 0
     m_StartTime: 0
-    m_StopTime: 0.016666668
+    m_StopTime: 0.26666668
     m_OrientationOffsetY: 0
     m_Level: 0
     m_CycleOffset: 0
@@ -65,4 +92,53 @@ AnimationClip:
   m_EulerEditorCurves: []
   m_HasGenericRootTransform: 0
   m_HasMotionFloatCurves: 0
-  m_Events: []
+  m_Events:
+  - time: 0
+    functionName: MoveToPlayer
+    data: 
+    objectReferenceParameter: {fileID: 0}
+    floatParameter: 0
+    intParameter: 0
+    messageOptions: 0
+  - time: 0
+    functionName: startAttack
+    data: 
+    objectReferenceParameter: {fileID: 0}
+    floatParameter: 0
+    intParameter: 0
+    messageOptions: 0
+  - time: 0.13333334
+    functionName: PlaySound
+    data: 
+    objectReferenceParameter: {fileID: 0}
+    floatParameter: 0
+    intParameter: 0
+    messageOptions: 0
+  - time: 0.16666667
+    functionName: HitTargets
+    data: 
+    objectReferenceParameter: {fileID: 0}
+    floatParameter: 0
+    intParameter: 0
+    messageOptions: 0
+  - time: 0.23333333
+    functionName: ClearTargets
+    data: 
+    objectReferenceParameter: {fileID: 0}
+    floatParameter: 0
+    intParameter: 0
+    messageOptions: 0
+  - time: 0.23333333
+    functionName: MoveCenter
+    data: 
+    objectReferenceParameter: {fileID: 0}
+    floatParameter: 0
+    intParameter: 0
+    messageOptions: 0
+  - time: 0.25
+    functionName: EndAttack
+    data: 
+    objectReferenceParameter: {fileID: 0}
+    floatParameter: 0
+    intParameter: 0
+    messageOptions: 0

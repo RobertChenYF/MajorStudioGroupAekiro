@@ -437,14 +437,16 @@ public class Roll : PlayerState
                 shouldFlip = false;
         }
 
-        if(shouldFlip)
+        if(shouldFlip && playerStateManager.Boss2 != null)
             playerStateManager.flip();
     }
     public override void Leave()
     {
         base.Leave();
 
-        if (shouldFlip)
+        if (shouldFlip && playerStateManager.Boss2 != null)
+            playerStateManager.flip();
+        if (playerStateManager.Boss1 != null)
             playerStateManager.flip();
         playerStateManager.isDodging = false;
 

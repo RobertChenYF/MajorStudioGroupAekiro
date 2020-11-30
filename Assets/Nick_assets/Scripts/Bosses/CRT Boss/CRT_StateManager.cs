@@ -39,7 +39,7 @@ public class CRT_StateManager : MonoBehaviour
     public CRT_State[][] MovesList_2;
     public CRT_State[][] MovesList_3;
 
-    public enum AnimationState { CRT_Idle, CRT_Single_Front, CRT_Single_Back, CRT_Double_Front, CRT_Double_Back, CRT_Double_Vertical, CRT_AllAttack, CRT_Stun, CRT_Dead };
+    public enum AnimationState { CRT_Idle, CRT_Single_Front, CRT_Single_Back, CRT_Double_Front, CRT_Double_Back, CRT_Double_Vertical, CRT_All, CRT_Stun, CRT_Dead };
     private AnimationState currentAnimationState;
     public Animator myBossAnimator;
 
@@ -48,6 +48,9 @@ public class CRT_StateManager : MonoBehaviour
     [HideInInspector]
     public int comboStep, comboLength;
     public CRT_State comboNextState;
+    [HideInInspector]
+    public bool attackActive;
+
 
     private void Start()
     {
@@ -77,27 +80,27 @@ public class CRT_StateManager : MonoBehaviour
         Attack_3 = new CRT_State[] { AllAttack_simul };
 
         Combo_1 = new CRT_State[] { SingleAttack_normal, SingleAttack_normal, DoubleAttack_hoz };
-        Combo_2 = new CRT_State[] { SingleAttack_normal, SingleAttack_normal, SingleAttack_long };
-        Combo_3 = new CRT_State[] { SingleAttack_normal, SingleAttack_quick, SingleAttack_quick, SingleAttack_long };
+        Combo_2 = new CRT_State[] { SingleAttack_normal, SingleAttack_normal, SingleAttack_normal };
+        Combo_3 = new CRT_State[] { SingleAttack_normal, SingleAttack_normal, SingleAttack_normal, SingleAttack_normal };
         Combo_4 = new CRT_State[] { DoubleAttack_hoz, DoubleAttack_hoz, AllAttack_simul };
-        Combo_5 = new CRT_State[] { DoubleAttack_hoz, SingleAttack_quick, SingleAttack_quick, DoubleAttack_hoz, SingleAttack_quick, SingleAttack_quick };
+        Combo_5 = new CRT_State[] { DoubleAttack_hoz, SingleAttack_normal, SingleAttack_normal, DoubleAttack_hoz, SingleAttack_normal };
         Combo_6 = new CRT_State[] { DoubleAttack_ver, DoubleAttack_ver, DoubleAttack_hoz, DoubleAttack_hoz, AllAttack_simul };
-        Combo_7 = new CRT_State[] { DoubleAttack_ver, SingleAttack_quick, SingleAttack_quick, DoubleAttack_hoz, SingleAttack_long, SingleAttack_quick };
-        Combo_8 = new CRT_State[] { AllAttack_simul, SingleAttack_long, SingleAttack_quick, SingleAttack_quick, DoubleAttack_hoz };
+        Combo_7 = new CRT_State[] { DoubleAttack_ver, SingleAttack_normal, SingleAttack_normal, DoubleAttack_hoz, SingleAttack_normal, SingleAttack_normal };
+        Combo_8 = new CRT_State[] { AllAttack_simul, SingleAttack_normal, SingleAttack_normal, SingleAttack_normal, DoubleAttack_hoz };
 
-        /*
+        
         // PHASE 1: MOVE LIST
         MovesList_1 = new CRT_State[][] { Attack_1, Attack_2_v, Combo_1, Combo_2 };
         // PHASE 2: MOVE LIST
         MovesList_2 = new CRT_State[][] { Attack_3, Combo_1, Combo_2, Combo_3, Combo_4 };
         // PHASE 2: MOVE LIST
-        MovesList_3 = new CRT_State[][] { Combo_4, Combo_5, Combo_6, Combo_7, Combo_8 };*/
+        MovesList_3 = new CRT_State[][] { Combo_4, Combo_5, Combo_6, Combo_7, Combo_8 };
 
-        MovesList_1 = new CRT_State[][] { Attack_1 };
+        /*MovesList_1 = new CRT_State[][] { Attack_1 };
         // PHASE 2: MOVE LIST
         MovesList_2 = new CRT_State[][] { Attack_1 };
         // PHASE 2: MOVE LIST
-        MovesList_3 = new CRT_State[][] { Attack_1 };
+        MovesList_3 = new CRT_State[][] { Attack_1 };*/
 
         ChangeState(Idle); // Starting state is idle
         currentAnimationState = AnimationState.CRT_Idle;
@@ -110,7 +113,17 @@ public class CRT_StateManager : MonoBehaviour
         else
         {
             StopCombo();
+            PlayAnimation(AnimationState.CRT_Dead);
             ChangeState(Dead);
+        }
+    }
+
+    public void GetStunned()
+    {
+        if (comboActive)
+        {
+            StopCombo();
+            StartCoroutine(Stun(Boss.StunnedDuration));
         }
     }
 
@@ -133,6 +146,11 @@ public class CRT_StateManager : MonoBehaviour
         StopAllCoroutines();
     }
 
+    public void DieAnim()
+    {
+        PlayAnimation(AnimationState.CRT_Single_Back);
+    }
+
     IEnumerator Combo(CRT_State[] attacks)
     {
         comboStep = 0;
@@ -146,10 +164,11 @@ public class CRT_StateManager : MonoBehaviour
             comboNextState = S;
             ChangeState(PrepareAttack); // Take Aim
             yield return new WaitForSeconds(S.GetPrepDuration());
+            //Boss.PlaySound();
             ChangeState(S); // Attack!! 
             yield return new WaitForSeconds(S.GetDuration());
             ComboState.SetPrevious(S);
-            ChangeState(ComboState);
+            //ChangeState(ComboState);
             yield return new WaitForSeconds(ComboState.GetPrevious().GetCooldown());
             comboStep++;
 
@@ -157,16 +176,25 @@ public class CRT_StateManager : MonoBehaviour
 
             //Prepare, S, BackToIdle
         }
-        ChangeState(Idle);
+        //ChangeState(Idle);
         comboActive = false;
     }
 
+    IEnumerator Stun(float delay)
+    {
+        PlayAnimation(AnimationState.CRT_Stun);
+        yield return new WaitForSeconds(delay);
+        EndAttack();
+    }
+
+    public void startAttack()
+    {
+        attackActive = true;
+    }
     public void EndAttack()
     {
-        if (comboActive)
-            ChangeState(ComboState);
-        else
-            ChangeState(Idle);
+        attackActive = false;
+        ChangeState(Idle);
     }
 
     public void DetermineAnimation(string name)
@@ -177,7 +205,7 @@ public class CRT_StateManager : MonoBehaviour
                 if(Boss.targets[0].isUp)
                     PlayAnimation(AnimationState.CRT_Single_Back);
                 else
-                    PlayAnimation(AnimationState.CRT_Single_Back);
+                    PlayAnimation(AnimationState.CRT_Single_Front);
                 break;
 
             case "DoubleHoz":
@@ -192,11 +220,15 @@ public class CRT_StateManager : MonoBehaviour
                 break;
 
             case "AllSimul":
-                PlayAnimation(AnimationState.CRT_AllAttack);
+                PlayAnimation(AnimationState.CRT_All);
                 break;
 
             case "Idle":
                 PlayAnimation(AnimationState.CRT_Idle);
+                break;
+
+            case "Stunned":
+                PlayAnimation(AnimationState.CRT_Stun);
                 break;
 
             default:

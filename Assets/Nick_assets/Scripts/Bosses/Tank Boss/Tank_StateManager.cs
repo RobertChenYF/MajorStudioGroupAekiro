@@ -27,12 +27,15 @@ public class Tank_StateManager : MonoBehaviour
     public Tank_State ShootOil_1;
 
     public Tank_State Stunned;
-    //public Tank_State Dead;
+    public Tank_State Dead;
 
     public Tank_State[] Attack_1;
 
     public Tank_State[] attackStateList;
-    public Tank_State[][] MoveList_1;
+    public Tank_State[] MoveList_1;
+    public Tank_State[] MoveList_2;
+
+    //public Tank_State[][] MoveList_1;
 
 
     [HideInInspector]
@@ -67,10 +70,10 @@ public class Tank_StateManager : MonoBehaviour
         Stunned = new Tank_State_Stunned(Main_SM, Boss, "Stunned", Boss.StunDuration);
 
 
-        Attack_1 = new Tank_State[] { AttackJumpSingle };
-        MoveList_1 = new Tank_State[][] { Attack_1 };
+        MoveList_1 = new Tank_State[] { DriveBy, AttackJumpSingle, AttackJumpSingle, ShootGunSingle, ShootMortar_1, ShootOil_1, Reposition, Reposition };
+        MoveList_2 = new Tank_State[] { DriveBy, AttackJumpTriple, AttackJumpSingle, ShootMortar_2, ShootGunTriple, ShootOil_1, Reposition };
 
-        attackStateList = new Tank_State[] { Reposition };
+        attackStateList = new Tank_State[] { AttackJumpTriple };
         //attackStateList = new Tank_State[] { ShootGunTriple, ShootGunSingle, DriveBy, AttackJumpSingle, AttackJumpTriple, Reposition };
 
         ChangeState(Idle);
@@ -78,7 +81,13 @@ public class Tank_StateManager : MonoBehaviour
 
     private void Update()
     {
-        currentState.DoState();
+        if (Boss.isAlive)
+            currentState.DoState();
+        else
+        {
+            //PlayAnimation(AnimationState.CRT_Dead);
+            ////ChangeState(Dead);
+        }
     }
 
     public void ChangeState(Tank_State newState)

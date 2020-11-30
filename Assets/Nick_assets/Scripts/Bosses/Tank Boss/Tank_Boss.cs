@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class Tank_Boss : MonoBehaviour
 {
+    public Transform BossTransform;
+
     [HideInInspector]
     public SpriteRenderer sp;
     [HideInInspector]
@@ -27,11 +29,15 @@ public class Tank_Boss : MonoBehaviour
     public Location_Boss currentBossLocation, targetBossLocation;
 
     [Header("Attributes")]
+    public int CurrentPhase;
     public float CollisionRange = 1f;
     public float StunDuration = 2f;
     public int MaxHealth = 50;
     public int health;
+    public int Phase2_Thresh;
+    public bool isAlive;
     public bool CanBeAttacked;
+    public bool lookingRight;
 
     [Header("IDLE")]
     public float TimeBetweenAttacks_1 = 2.5f;
@@ -99,6 +105,11 @@ public class Tank_Boss : MonoBehaviour
     public float OilTimeBtwnShot = 0.25f;
     public GameObject OilShot;
 
+
+    [Header("Sounds")]
+    public AudioSource SoundSource;
+    public AudioClip[] audioClips;
+
     private void Awake()
     {
         sp = this.GetComponent<SpriteRenderer>();
@@ -116,6 +127,17 @@ public class Tank_Boss : MonoBehaviour
         DriveOffDelay = DriveOffDelay_1;
 
         health = MaxHealth;
+        Phase2_Thresh = MaxHealth / 2;
+        isAlive = true;
+    }
+
+    public void PlaySound()
+    {
+        SoundSource.Play();
+    }
+    public void SetSound(int i)
+    {
+        SoundSource.clip = audioClips[i];
     }
 
     public void GetStunned()
@@ -131,6 +153,13 @@ public class Tank_Boss : MonoBehaviour
 
     private void Update()
     {
+        if (health > Phase2_Thresh)
+            CurrentPhase = 1;
+        else if (health <= Phase2_Thresh)
+            CurrentPhase = 2;
+        else
+            isAlive = false;
+
         //Debug.Log(currentBossLocation.gameObject.name);
         UpdateLocationInfo();
         CheckCollideLocations();
@@ -139,9 +168,14 @@ public class Tank_Boss : MonoBehaviour
             DriveBy(startDriveLoc, endDriveLoc);
     }
 
-    public void UpdateLocationInfo()
+    private void UpdateLocationInfo()
     {
-        if (currentBossLocation.isUp)
+        if (sp.flipX)
+            lookingRight = false;
+        else
+            lookingRight = true;
+
+            if (currentBossLocation.isUp)
             isUp = true;
         else
             isUp = false;
@@ -175,6 +209,19 @@ public class Tank_Boss : MonoBehaviour
             else
                 CanBeAttacked = false;
         }
+    }
+
+    public void LookLeft()
+    {
+        if (lookingRight)
+            sp.flipX = true;
+            //BossTransform.localScale = new Vector3(-BossTransform.localScale.x, BossTransform.localScale.y, BossTransform.localScale.z);
+    }
+    public void LookRight()
+    {
+        if (!lookingRight)
+            sp.flipX = false;
+            //BossTransform.localScale = new Vector3(-BossTransform.localScale.x, BossTransform.localScale.y, BossTransform.localScale.z);
     }
 
     public bool CheckCanMortar()
@@ -240,6 +287,11 @@ public class Tank_Boss : MonoBehaviour
         startDriveLoc = start;
         endDriveLoc = end;
         this.transform.position = start.transform.position;
+
+        if (start.transform.position.x > end.transform.position.x)
+            LookLeft();
+        else
+            LookRight();
 
     }
 

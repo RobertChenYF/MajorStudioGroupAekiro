@@ -18,8 +18,8 @@ public class PlayerStateManager : MonoBehaviour
     [SerializeField]private GameObject PlayerTransform;
     [SerializeField]private ParticleSystem Spark;
     [SerializeField]private Animator ImpactRing;
-    [SerializeField]private CRT_Boss Boss1;
-    [SerializeField]private Tank_Boss Boss2;
+    [SerializeField]public CRT_Boss Boss1;
+    [SerializeField]public Tank_Boss Boss2;
 
 
     [SerializeField]private Image playerHealthBar;
