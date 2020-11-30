@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using XInputDotNetPure;
+//using XInputDotNetPure;
 
 public class ScreenShakeControl : MonoBehaviour
 {
@@ -9,7 +9,7 @@ public class ScreenShakeControl : MonoBehaviour
     [HideInInspector]public float shakeXMag;
     [HideInInspector] public float shakeYMag;
     [HideInInspector] public float shakeDuration;
-    PlayerIndex playerIndex;
+    //PlayerIndex playerIndex;
     [HideInInspector]public float rumbleIntensity;
     [HideInInspector]public float rumbleDuration;
     private Vector3 defaultCameraPos;
@@ -37,12 +37,12 @@ public class ScreenShakeControl : MonoBehaviour
 
         if (rumbleDuration > 0)
         {
-            GamePad.SetVibration(playerIndex, rumbleIntensity, rumbleIntensity);
+            //GamePad.SetVibration(playerIndex, rumbleIntensity, rumbleIntensity);
             rumbleDuration -= Time.deltaTime;
         }
         else
         {
-            GamePad.SetVibration(playerIndex, 0, 0);
+            //GamePad.SetVibration(playerIndex, 0, 0);
         }
         
     }
