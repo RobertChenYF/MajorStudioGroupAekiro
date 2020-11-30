@@ -50,6 +50,6 @@ Material:
     - _Color6: {r: 1.0086356, g: 1.7095938, b: 0.798348, a: 1}
     - _Flip: {r: 1, g: 1, b: 1, a: 1}
     - _RendererColor: {r: 1, g: 1, b: 1, a: 1}
-    - _ScreenColor: {r: 0, g: 1.4863107, b: 2.1185474, a: 1}
+    - _ScreenColor: {r: 0, g: 1.7073228, b: 2.433572, a: 1}
     - _SwordColor: {r: 0.7128872, g: 1.471698, b: 0.4512282, a: 1}
   m_BuildTextureStacks: []
