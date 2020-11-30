@@ -547,3 +547,32 @@ public class Stun : PlayerState
         playerStateManager.characterMaterial.SetFloat("_getHit", 0);
     }
 }
+
+public class Death : PlayerState
+{
+    
+    public Death(PlayerStateManager theGameStateManager) : base(theGameStateManager)
+    {
+
+    }
+    public override void StateBehavior()
+    {
+        if (Input.anyKeyDown)
+        {
+            playerStateManager.RestartGame();
+        }
+        
+    }
+
+    public override void Enter()
+    {
+        base.Enter();
+        playerStateManager.PlayAnimation(PlayerStateManager.AnimationState.Stun);
+        playerStateManager.TurnOnDeathScreen();
+    }
+    public override void Leave()
+    {
+        base.Leave();
+        
+    }
+}

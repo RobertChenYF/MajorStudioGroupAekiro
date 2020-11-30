@@ -2,24 +2,33 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class PlayerStateManager : MonoBehaviour
 {
     private PlayerState currentPlayerState;
     public SpriteRenderer BossSpriteRenderer;
     private Material BossMat;
-    [HideInInspector]public Material characterMaterial;
-    [HideInInspector]public float swordGlowAmount = 1.1f;
+    [SerializeField]private GameObject DeathScreen;
+    [SerializeField] private AudioSource playerAudioSource;
+    [HideInInspector] public Material characterMaterial;
+    [HideInInspector] public float swordGlowAmount = 1.1f;
     private Color defaultSwordColor;
     private Color defaultSwordMidColor;
     private ScreenShakeControl screenShakeControl;
 
     private float bossFlashAmount = 0;
-    [SerializeField]private GameObject PlayerTransform;
-    [SerializeField]private ParticleSystem Spark;
-    [SerializeField]private Animator ImpactRing;
-    [SerializeField]public CRT_Boss Boss1;
-    [SerializeField]public Tank_Boss Boss2;
+    [SerializeField] private GameObject PlayerTransform;
+    [SerializeField] private ParticleSystem Spark;
+    [SerializeField] private Animator ImpactRing;
+    [SerializeField] public CRT_Boss Boss1;
+    [SerializeField] public Tank_Boss Boss2;
+
+    [Header("Audio Clip")]
+    [SerializeField] private AudioClip deflectSound;
+    [SerializeField] private AudioClip blockSound;
+    [SerializeField] private AudioClip getHitSound;
+    [SerializeField] private AudioClip landHitSound;
 
 
     [SerializeField]private Image playerHealthBar;
@@ -96,6 +105,11 @@ public class PlayerStateManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+
+        if (playerCurrentHealth<=0&&currentPlayerState.ToString() != "Death")
+        {
+            ChangeState(new Death(this));
+        }
         currentPlayerState.StateBehavior();
         playerHealthBar.fillAmount = playerCurrentHealth / playerFullHealth;
         if (HitPause > 0)
@@ -192,6 +206,7 @@ public class PlayerStateManager : MonoBehaviour
             swordGlowAmount += 0.8f;
             //impact ring
             ImpactRing.SetTrigger("Hit");
+            PlayPlayerSound(landHitSound, Random.Range(0.8f, 1.2f), 0.7f);
             return HitResult.Land;
         }
         else
@@ -214,6 +229,7 @@ public class PlayerStateManager : MonoBehaviour
             ScreenShake(lightAttackScreenShakeDuration, lightAttackScreenShakeMagnitude * a, lightAttackScreenShakeMagnitude * a);
             ControllerRumble(0.15f, 0.4f * a);
             swordGlowAmount += 0.8f;
+            PlayPlayerSound(landHitSound, Random.Range(0.8f, 1.2f), 0.9f);
             //impact ring
             ImpactRing.SetTrigger("Hit");
             return HitResult.Land;
@@ -240,6 +256,10 @@ public class PlayerStateManager : MonoBehaviour
                 //
                 Debug.Log("deflect Succefully");
                 Spark.Emit(150);
+                swordGlowAmount += 1;
+                ScreenShake(0.1f,0.2f,0.2f);
+                ControllerRumble(0.15f, 0.4f);
+                PlayPlayerSound(deflectSound,Random.Range(0.9f,1.1f),1);
                 HitPause = hitPauseDuration;
                 return HitResult.Deflect;
             }
@@ -249,6 +269,8 @@ public class PlayerStateManager : MonoBehaviour
                 Spark.Emit(50);
                 Debug.Log("block Succefully");
                 playerCurrentHealth -= damage * BlockDamagePercentage;
+                PlayPlayerSound(blockSound, Random.Range(0.9f, 1.1f), 0.7f);
+                ScreenShake(0.13f, 0.3f, 0.3f);
                 HitPause = hitPauseDuration;
                 return HitResult.Block;
             }
@@ -256,6 +278,8 @@ public class PlayerStateManager : MonoBehaviour
             {
                 //play get hit effect, health--, interprut current state
                 playerCurrentHealth -= damage;
+                PlayPlayerSound(getHitSound, Random.Range(0.9f, 1.1f), 0.7f);
+                ScreenShake(0.13f, 0.3f, 0.3f);
                 HitPause = hitPauseDuration;
                 ChangeState(new Stun(this));
                 return HitResult.Land;
@@ -307,5 +331,21 @@ public class PlayerStateManager : MonoBehaviour
         swordGlowAmount += Time.deltaTime * 2.1f;
         heavyHitDamage += Time.deltaTime * playerHeavyHitDamageIncreasePerSecond;
 
+    }
+    public void PlayPlayerSound(AudioClip clip,float pitch,float volume)
+    {
+        playerAudioSource.pitch = pitch;
+        playerAudioSource.volume = volume;
+        playerAudioSource.PlayOneShot(clip);
+    }
+
+    public void RestartGame()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+    }
+
+    public void TurnOnDeathScreen()
+    {
+        DeathScreen.SetActive(true);
     }
 }

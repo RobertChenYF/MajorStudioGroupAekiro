@@ -205,4 +205,9 @@ public class CRT_Boss : MonoBehaviour
             yield return new WaitForSeconds(delay);
         }
     }
+
+    public void ScreenShakeBoss2(float duration1, float strength1)
+    {
+        playerStateManager.ScreenShake(duration1,strength1,strength1);
+    }
 }
