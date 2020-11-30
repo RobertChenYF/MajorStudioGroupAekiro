@@ -255,13 +255,9 @@ public class PlayerStateManager : MonoBehaviour
             else
             {
                 //play get hit effect, health--, interprut current state
-                if (currentPlayerState.ToString()!= "Roll" && currentPlayerState.ToString()!="Shuffle")
-                {
-                ChangeState(new Stun(this));
-                }
                 playerCurrentHealth -= damage;
                 HitPause = hitPauseDuration;
-                
+                ChangeState(new Stun(this));
                 return HitResult.Land;
             }
         }
