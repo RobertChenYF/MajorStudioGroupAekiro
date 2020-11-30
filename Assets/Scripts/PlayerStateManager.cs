@@ -249,10 +249,7 @@ public class PlayerStateManager : MonoBehaviour
             {
                 //play deflect effect here
                 //stun boss;
-                if (Boss1 != null)
-                    Boss1.GetStunned();
-                if (Boss2 != null)
-                    Boss2.GetStunned();
+                
                 //
                 Debug.Log("deflect Succefully");
                 Spark.Emit(150);
@@ -261,7 +258,12 @@ public class PlayerStateManager : MonoBehaviour
                 ControllerRumble(0.15f, 0.4f);
                 PlayPlayerSound(deflectSound,Random.Range(0.9f,1.1f),1);
                 HitPause = hitPauseDuration;
+                //if (Boss1 != null)
+                   // Boss1.GetStunned();
+               // if (Boss2 != null)
+                   // Boss2.GetStunned();
                 return HitResult.Deflect;
+                
             }
             else if (currentPlayerState.ToString() == "Blocking")
             {
