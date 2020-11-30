@@ -20,7 +20,7 @@ public class Tank_State_ShootMortar : Tank_State
             {
                 prepPhase = false;
                 shootPhase = true;
-                Boss.sp.color = Color.red;
+                //Boss.sp.color = Color.red;
                 // SHOOT AT THE TARGETS
                 Boss.ShootMortar(Boss.targets);
             }
@@ -34,9 +34,10 @@ public class Tank_State_ShootMortar : Tank_State
                 {
                     if (shootPhase)
                     {
-                        Boss.sp.color = Color.green;
+                        //Boss.sp.color = Color.green;
                         shootPhase = false;
                         returnPhase = true;
+                        SM.PlayAnimation(Tank_StateManager.AnimationState.Tank_ShootMortar_end);
                     }
                     else
                     {
@@ -60,6 +61,8 @@ public class Tank_State_ShootMortar : Tank_State
 
         t1 = 0; t2 = 0; t3 = 0;
         prepPhase = true; shootPhase = false; returnPhase = false;
+
+        SM.PlayAnimation(Tank_StateManager.AnimationState.Tank_ShootMortar_start);
 
         // DETERMINE TARGET LOCATIONS
 

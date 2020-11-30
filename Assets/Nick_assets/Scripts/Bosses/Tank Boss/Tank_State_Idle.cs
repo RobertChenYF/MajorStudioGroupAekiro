@@ -30,8 +30,10 @@ public class Tank_State_Idle : Tank_State
 
     public override void Enter()
     {
+        SM.PlayAnimation(Tank_StateManager.AnimationState.Tank_Idle);
         Boss.SetSound(0);
-        Boss.sp.color = Color.cyan;
+        Boss.PlaySound();
+        //Boss.sp.color = Color.cyan;
         Boss.rb.velocity = Vector2.zero;
         t = 0;
 

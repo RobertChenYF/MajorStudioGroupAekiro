@@ -16,7 +16,7 @@ public class Tank_State_DriveIn : Tank_State
     {
         Debug.Log("Drive IN");
 
-        Boss.sp.color = Color.green;
+        //Boss.sp.color = Color.green;
         int r = Random.Range(1, 4); // 1 = left, 2 = middle, 3 = right
         int r2 = Random.Range(0, 2); // 0 = top, else, bot
 

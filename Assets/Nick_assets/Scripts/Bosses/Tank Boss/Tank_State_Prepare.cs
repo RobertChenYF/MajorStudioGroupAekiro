@@ -66,35 +66,35 @@ public class Tank_State_Prepare : Tank_State
                 break;
 
             case "AttackJump_1":
-                Boss.SetSound(4);
+                Boss.SetSound2(4);
                 TargetPlayerLocation();
                 Boss.TargetLocations();
                 SM.ChangeState(SM.AttackJumpSingle);
                 break;
 
             case "AttackJump_3":
-                Boss.SetSound(4);
+                Boss.SetSound2(4);
                 TargetPlayerLocation();
                 Boss.TargetLocations();
                 SM.ChangeState(SM.AttackJumpTriple);
                 break;
 
             case "ShootGun_1":
-                Boss.SetSound(5);
+                Boss.SetSound2(5);
                 TargetPlayerLocation();
                 Boss.TargetLocations();
                 SM.ChangeState(SM.ShootGunSingle);
                 break;
 
             case "ShootGun_3":
-                Boss.SetSound(5);
+                Boss.SetSound2(5);
                 TargetPlayerLocation();
                 Boss.TargetLocations();
                 SM.ChangeState(SM.ShootGunTriple);
                 break;
 
             case "Mortar_1":
-                Boss.SetSound(5);
+                Boss.SetSound2(5);
                 if (Boss.CheckCanMortar())
                 {
                     TargetPlayerLocation();
@@ -108,7 +108,7 @@ public class Tank_State_Prepare : Tank_State
                 break;
 
             case "Mortar_2":
-                Boss.SetSound(5);
+                Boss.SetSound2(5);
                 if (Boss.CheckCanMortar())
                 {
                     TargetMultipleLocations(SM.ShootMortar_2.GetNumAttacks());
@@ -122,7 +122,7 @@ public class Tank_State_Prepare : Tank_State
                 break;
 
             case "Oil_1":
-                Boss.SetSound(5);
+                Boss.SetSound2(5);
                 TargetPlayerLocation();
                 SM.ChangeState(SM.ShootOil_1);
                 break;
@@ -197,12 +197,14 @@ public class Tank_State_Prepare : Tank_State
 
     private void PrepareDriveBy()
     {
+        SM.PlayAnimation(Tank_StateManager.AnimationState.Tank_Double);
         if (Boss.isDriving) // is already in the drive by combo
         {
             canStartDrive = false;
             if (Boss.DriveComboCounter < Boss.DriveComboNumber)
             {
                 Boss.SetSound(1);
+                Boss.PlaySound();
                 DetermineDriveBy();
                 Boss.DriveComboCounter++;
                 SM.ChangeState(SM.DriveBy);
@@ -210,6 +212,7 @@ public class Tank_State_Prepare : Tank_State
             else
             {
                 Boss.SetSound(3);
+                Boss.PlaySound();
                 SM.ChangeState(SM.DriveIn);
             }
         }
@@ -217,6 +220,7 @@ public class Tank_State_Prepare : Tank_State
         {
             Boss.DriveComboCounter = 0;
             Boss.SetSound(2);
+            Boss.PlaySound();
             canStartDrive = true;
         }
     }
@@ -233,7 +237,7 @@ public class Tank_State_Prepare : Tank_State
 
     public override void Enter()
     {
-        Boss.sp.color = Color.yellow;
+        //Boss.sp.color = Color.yellow;
         t = 0;
 
         AttackToPerform = GetNextState();

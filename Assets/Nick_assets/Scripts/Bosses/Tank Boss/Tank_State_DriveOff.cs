@@ -14,7 +14,7 @@ public class Tank_State_DriveOff : Tank_State
 
     public override void Enter()
     {
-        Boss.sp.color = Color.green;
+        //Boss.sp.color = Color.green;
 
         Location_Boss target;
         int r = Random.Range(0, 2);

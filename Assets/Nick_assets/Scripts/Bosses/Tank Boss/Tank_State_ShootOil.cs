@@ -19,7 +19,7 @@ public class Tank_State_ShootOil : Tank_State
             {
                 prepPhase = false;
                 shootPhase = true;
-                Boss.sp.color = Color.red;
+                //Boss.sp.color = Color.red;
                 // SHOOT AT THE TARGETS
                 Boss.ShootOil(Boss.targets);
             }
@@ -33,7 +33,7 @@ public class Tank_State_ShootOil : Tank_State
                 {
                     if (shootPhase)
                     {
-                        Boss.sp.color = Color.green;
+                        //Boss.sp.color = Color.green;
                         shootPhase = false;
                         returnPhase = true;
                     }

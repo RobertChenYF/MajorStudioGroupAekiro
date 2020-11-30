@@ -107,7 +107,8 @@ public class Tank_Boss : MonoBehaviour
 
 
     [Header("Sounds")]
-    public AudioSource SoundSource;
+    public AudioSource SoundSource_car;
+    public AudioSource SoundSource_other;
     public AudioClip[] audioClips;
 
     private void Awake()
@@ -131,13 +132,27 @@ public class Tank_Boss : MonoBehaviour
         isAlive = true;
     }
 
+    // SOUNDS
     public void PlaySound()
     {
-        SoundSource.Play();
+        SoundSource_car.Play();
     }
+    public void StopSound()
+    {
+        SoundSource_car.Stop();
+    }
+    public void PlaySound_2()
+    {
+        SoundSource_other.Play();
+    }
+
     public void SetSound(int i)
     {
-        SoundSource.clip = audioClips[i];
+        SoundSource_car.clip = audioClips[i];
+    }
+    public void SetSound2(int i)
+    {
+        SoundSource_other.clip = audioClips[i];
     }
 
     public void GetStunned()
@@ -331,6 +346,10 @@ public class Tank_Boss : MonoBehaviour
     {
         foreach (Location loc in locs)
         {
+            SetSound2(5);
+            PlaySound_2();
+            Manager.PlayAnimation(Tank_StateManager.AnimationState.Tank_ShootMortar_static);
+            Manager.PlayAnimation(Tank_StateManager.AnimationState.Tank_ShootMortar);
             loc.TargetMortar();
             GameObject M = Instantiate(MortarShot, this.transform.position, Quaternion.identity) as GameObject;
             M.SendMessage("SetTargetLoc", loc);
@@ -347,8 +366,10 @@ public class Tank_Boss : MonoBehaviour
         ClearTargets();
     }
 
+
     public void ShootOil(List<Location> locs)
     {
+
         StartCoroutine(ShootOilCo(locs.Count, locs));
     }
 
@@ -356,6 +377,8 @@ public class Tank_Boss : MonoBehaviour
     {
         foreach (Location loc in locs)
         {
+            SetSound2(5);
+            PlaySound_2();
             Debug.Log("FIRE OIL");
 
             GameObject O = Instantiate(OilShot, this.transform.position, Quaternion.identity) as GameObject;
