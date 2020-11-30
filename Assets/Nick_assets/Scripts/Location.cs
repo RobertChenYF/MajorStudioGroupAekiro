@@ -4,6 +4,10 @@ using UnityEngine;
 
 public class Location : MonoBehaviour
 {
+    PlayerStateManager player;
+
+    public int damage = 10;
+
     public SpriteRenderer sp;
     public SpriteRenderer MortarTargetIndicator;
     public SpriteRenderer OilTargetIndicator;
@@ -25,9 +29,14 @@ public class Location : MonoBehaviour
 
     void Start()
     {
+        player = FindObjectOfType<PlayerStateManager>();
+
         sp.color = new Color(1, 1, 1, 0.25f);
-        MortarTargetIndicator.enabled = false;
-        OilTargetIndicator.enabled = false;
+        if (MortarTargetIndicator != null && OilTargetIndicator != null)
+        {
+            MortarTargetIndicator.enabled = false;
+            OilTargetIndicator.enabled = false;
+        }
     }
 
     private void Update()
@@ -49,6 +58,8 @@ public class Location : MonoBehaviour
     {
         sp.color = new Color(1, 0, 0, 0.75f);
         isHit = true;
+        if (isOccupied)
+            player.getMeleeAttacked(this, damage);
     }
 
     public void ClearHit()

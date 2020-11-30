@@ -33,8 +33,6 @@ public class CRT_State_Attack : CRT_State
             timer = PrepDuration;
         }
         else*/
-
-        Boss.HitTargets();
     }
 
     IEnumerator ConsecAttacks()

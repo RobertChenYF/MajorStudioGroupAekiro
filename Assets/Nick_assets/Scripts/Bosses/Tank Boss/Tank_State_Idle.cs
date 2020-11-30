@@ -30,11 +30,20 @@ public class Tank_State_Idle : Tank_State
 
     public override void Enter()
     {
+        Boss.SetSound(0);
         Boss.sp.color = Color.cyan;
         Boss.rb.velocity = Vector2.zero;
         t = 0;
 
-        MoveList = SM.attackStateList;
+        if (Boss.CurrentPhase == 1)
+            MoveList = SM.MoveList_1;
+        else if (Boss.CurrentPhase == 2)
+            MoveList = SM.MoveList_2;
+
+        if (Boss.currentBossLocation.transform.position.x > 0)
+            Boss.LookLeft();
+        else
+            Boss.LookRight();
 
     }
 

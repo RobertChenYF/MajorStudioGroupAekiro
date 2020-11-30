@@ -143,6 +143,11 @@ public class Tank_State_AttackJump : Tank_State
         startPos = Boss.transform.position;
         targetPos = target.transform.position;
         endPos = endLocation.transform.position;
+
+        if (startPos.x > endPos.x)
+            Boss.LookLeft();
+        else
+            Boss.LookRight();
     }
 
     public override void Leave()

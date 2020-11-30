@@ -38,7 +38,8 @@ public class Player : MonoBehaviour
     public bool active = true;
 
     private PlayerStateManager Manager;
-    private Location currentLoc;
+    [HideInInspector]
+    public Location currentLoc;
     private bool canDamage = true;
     private bool aimUp;
 
@@ -55,10 +56,8 @@ public class Player : MonoBehaviour
 
     void Update()
     {
-        isRight = currentLoc.isRight;
-        isUp = currentLoc.isUp;
-        currentLoc.isOccupied = true;
-
+        currentLoc = Manager.currentLoc;
+        //currentLoc.isOccupied = true;
 
     }
 
@@ -73,7 +72,7 @@ public class Player : MonoBehaviour
         }
     }
 
-    private void UpdateMovement()
+    /*private void UpdateMovement()
     {
         if (currentLoc == locC || currentLoc == locA)
         {
@@ -87,7 +86,7 @@ public class Player : MonoBehaviour
         }
 
         this.transform.position = Vector3.Lerp(this.transform.position, currentLoc.transform.position, Time.deltaTime * DodgeSpeed);
-    }
+    }*/
 
     private void UpdateDamaged()
     {

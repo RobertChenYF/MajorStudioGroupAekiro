@@ -24,6 +24,7 @@ public class CRT_State_Stunned : CRT_State
         Boss.sp.color = Color.green;
         Boss.ClearTargets();
         timer = 0;
+        SM.DetermineAnimation(this.GetName());
     }
 
     public override void Leave()

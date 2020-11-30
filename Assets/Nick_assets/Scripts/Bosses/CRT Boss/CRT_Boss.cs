@@ -7,12 +7,22 @@ public class CRT_Boss : MonoBehaviour
 
     public PlayerStateManager playerStateManager;
 
+    CRT_StateManager Manager;
+
     [HideInInspector]
     public SpriteRenderer sp;
     [HideInInspector]
     public int NumAttacks = 4; // How many different attacks does this boss know --> currently 4
     [HideInInspector]
     public List<Location> targets;
+
+    private Transform targetTransform;
+    public Transform transformDown;
+    public Transform transformUp;
+    public Transform transformCenter;
+    public Transform transformLeft;
+    public Transform transformRight;
+
 
     [Header("Attributes")]
     public int MaxHealth = 50;
@@ -68,18 +78,59 @@ public class CRT_Boss : MonoBehaviour
     [Header("Stun-Deflected")]
     public float StunnedDuration = 1f;
 
+    [Header("Sounds")]
+    public AudioSource SoundSource;
+    public AudioClip[] audioClips;
+
     private void Awake()
     {
         sp = this.GetComponent<SpriteRenderer>();
-       
+        Manager = this.GetComponent<CRT_StateManager>();
+
         health = MaxHealth;
 
         Phase2_Thresh = MaxHealth * Phase2_Entry;
         Phase3_Thresh = MaxHealth * Phase3_Entry;
+
+        //SoundSource.clip = audioClips[0];
+        targetTransform = transformCenter;
+    }
+
+    public void SetSound(int i)
+    {
+        SoundSource.clip = audioClips[i];
+    }
+    public void PlaySound()
+    {
+        SoundSource.Play();
+    }
+
+    public void MoveToPlayer()
+    {
+        if (targets.Count > 0)
+        {
+            if (targets[0].transform.position.x < 0)
+                targetTransform = transformLeft;
+            else
+                targetTransform = transformRight;
+        }
+    }
+    public void MoveDown()
+    {
+        targetTransform = transformDown;
+    }
+    public void MoveCenter()
+    {
+        targetTransform = transformCenter;
+    }
+    public void MoveUp()
+    {
+        targetTransform = transformUp;
     }
 
     private void Update()
     {
+        this.transform.position = Vector3.Lerp(this.transform.position, targetTransform.position, Time.deltaTime*5);
         
         if (health > Phase2_Thresh)
             CurrentPhase = 1;
@@ -89,6 +140,25 @@ public class CRT_Boss : MonoBehaviour
             CurrentPhase = 3;
         else
             isAlive = false;
+
+        Location Loc;
+        foreach (Location l in locations)
+        {
+            if (l.isOccupied && !Manager.attackActive)
+            {
+                Loc = l;
+
+                if (Loc.transform.position.x > 0)
+                    sp.flipX = false;
+                else
+                    sp.flipX = true;
+            }
+        }        
+    }
+
+    public void GetStunned()
+    {
+        Manager.GetStunned();
     }
 
     public void TargetLocations()
@@ -101,11 +171,14 @@ public class CRT_Boss : MonoBehaviour
 
     public void HitTargets()
     {
-        foreach (Location l in targets)
+        if (targets.Count > 0)
         {
-            l.Hit();
-            //get hit function
-            playerStateManager.getMeleeAttacked(l, 1);
+            foreach (Location l in targets)
+            {
+                l.Hit();
+                //get hit function
+                playerStateManager.getMeleeAttacked(l, 1);
+            }
         }
     }
 

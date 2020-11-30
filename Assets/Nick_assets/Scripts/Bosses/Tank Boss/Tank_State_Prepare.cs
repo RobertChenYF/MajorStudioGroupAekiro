@@ -66,30 +66,35 @@ public class Tank_State_Prepare : Tank_State
                 break;
 
             case "AttackJump_1":
+                Boss.SetSound(4);
                 TargetPlayerLocation();
                 Boss.TargetLocations();
                 SM.ChangeState(SM.AttackJumpSingle);
                 break;
 
             case "AttackJump_3":
+                Boss.SetSound(4);
                 TargetPlayerLocation();
                 Boss.TargetLocations();
                 SM.ChangeState(SM.AttackJumpTriple);
                 break;
 
             case "ShootGun_1":
+                Boss.SetSound(5);
                 TargetPlayerLocation();
                 Boss.TargetLocations();
                 SM.ChangeState(SM.ShootGunSingle);
                 break;
 
             case "ShootGun_3":
+                Boss.SetSound(5);
                 TargetPlayerLocation();
                 Boss.TargetLocations();
                 SM.ChangeState(SM.ShootGunTriple);
                 break;
 
             case "Mortar_1":
+                Boss.SetSound(5);
                 if (Boss.CheckCanMortar())
                 {
                     TargetPlayerLocation();
@@ -103,6 +108,7 @@ public class Tank_State_Prepare : Tank_State
                 break;
 
             case "Mortar_2":
+                Boss.SetSound(5);
                 if (Boss.CheckCanMortar())
                 {
                     TargetMultipleLocations(SM.ShootMortar_2.GetNumAttacks());
@@ -116,6 +122,7 @@ public class Tank_State_Prepare : Tank_State
                 break;
 
             case "Oil_1":
+                Boss.SetSound(5);
                 TargetPlayerLocation();
                 SM.ChangeState(SM.ShootOil_1);
                 break;
@@ -195,18 +202,21 @@ public class Tank_State_Prepare : Tank_State
             canStartDrive = false;
             if (Boss.DriveComboCounter < Boss.DriveComboNumber)
             {
+                Boss.SetSound(1);
                 DetermineDriveBy();
                 Boss.DriveComboCounter++;
                 SM.ChangeState(SM.DriveBy);
             }
             else
             {
+                Boss.SetSound(3);
                 SM.ChangeState(SM.DriveIn);
             }
         }
         else // Start the drive by combo
         {
             Boss.DriveComboCounter = 0;
+            Boss.SetSound(2);
             canStartDrive = true;
         }
     }

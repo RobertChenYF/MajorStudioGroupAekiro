@@ -13,7 +13,7 @@ public class Temp_Display_2 : MonoBehaviour
     //public Text text2;
 
     //public Image playerHealth;
-    //public Image bossHealth;
+    public Image bossHealth;
 
     void Start()
     {
@@ -30,6 +30,6 @@ public class Temp_Display_2 : MonoBehaviour
         //text2.text = "" + boss.CurrentPhase;
 
         //playerHealth.fillAmount = (float)player.health / player.MaxHealth;
-        //bossHealth.fillAmount = (float)boss.health / boss.MaxHealth;
+        bossHealth.fillAmount = (float)boss.health / boss.MaxHealth;
     }
 }

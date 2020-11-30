@@ -6,6 +6,7 @@ using UnityEngine.UI;
 public class PlayerStateManager : MonoBehaviour
 {
     private PlayerState currentPlayerState;
+    public SpriteRenderer BossSpriteRenderer;
     private Material BossMat;
     [HideInInspector]public Material characterMaterial;
     [HideInInspector]public float swordGlowAmount = 1.1f;
@@ -17,18 +18,20 @@ public class PlayerStateManager : MonoBehaviour
     [SerializeField]private GameObject PlayerTransform;
     [SerializeField]private ParticleSystem Spark;
     [SerializeField]private Animator ImpactRing;
-    [SerializeField]private CRT_Boss Boss;
+    [SerializeField]public CRT_Boss Boss1;
+    [SerializeField]public Tank_Boss Boss2;
+
 
     [SerializeField]private Image playerHealthBar;
     public Location locA, locB, locC, locD;
-    [HideInInspector]public Location currentLoc;
+    public Location currentLoc;
     [HideInInspector]public Location previousLoc;
     public enum AnimationState {Idle, LightHit, Block, Roll, BlockPoint, BlockBackswing, ChargeHeavyHit, HeavyHit, Shuffle, Stun};
     public enum HitResult {Land, Miss, Block, Deflect};
 
     private AnimationState currentAnimationState;
     public Animator mainCharacterAnimation;
-    private Animator BossAnimation;
+    public Animator BossAnimation;
 
     private float HitPause;
     private float playerCurrentHealth;
@@ -71,6 +74,10 @@ public class PlayerStateManager : MonoBehaviour
     [Header("Get Hit Stun")]
     public float GetHitStunDuration;
 
+    private bool canHitBoss;
+    [HideInInspector]
+    public bool lookingRight, isDodging;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -78,9 +85,10 @@ public class PlayerStateManager : MonoBehaviour
         defaultSwordColor = characterMaterial.GetColor("_SwordColor");
         screenShakeControl = GameObject.Find("ScreenShakerManager").GetComponent<ScreenShakeControl>();
         currentLoc = locA;
+        currentLoc.isOccupied = true;
         playerCurrentHealth = playerFullHealth;
-        BossAnimation = Boss.gameObject.GetComponent<Animator>();
-        BossMat = Boss.gameObject.GetComponent<SpriteRenderer>().material;
+        //BossAnimation = Boss.gameObject.GetComponent<Animator>();
+        BossMat = BossSpriteRenderer.material;
         ChangeState(new Idle(this));
         currentAnimationState = AnimationState.Idle;
     }
@@ -110,6 +118,33 @@ public class PlayerStateManager : MonoBehaviour
         swordGlowAmount = Mathf.Max(1.1f,swordGlowAmount);
         characterMaterial.SetColor("_SwordColor", defaultSwordColor*swordGlowAmount);
 
+        if (Boss2 != null)
+        {
+            if(!isDodging)
+            LookAtBoss();
+
+            if (Boss2.CanBeAttacked)
+                canHitBoss = true;
+            else
+                canHitBoss = false;
+        }
+        if (Boss1 != null)
+            canHitBoss = true;
+
+    }
+
+    private void LookAtBoss()
+    {
+        if (PlayerTransform.transform.localScale.x < 0)
+            lookingRight = true;
+        else
+            lookingRight = false;
+
+        if (Boss2.transform.position.x < this.transform.position.x && lookingRight)
+            flip();
+        else if (Boss2.transform.position.x > this.transform.position.x && !lookingRight)
+            flip();
+            
     }
 
     public void ChangeState(PlayerState newPlayerState)
@@ -141,32 +176,50 @@ public class PlayerStateManager : MonoBehaviour
 
     public HitResult MeleeAttack(float damage)
     {
-        Boss.health -= (int)playerLightHitDamage;
-        HitPause = hitPauseDuration;
-        //particle       
-        Spark.Emit(100);
-        bossFlashAmount += 0.9f;
-        ScreenShake(lightAttackScreenShakeDuration,lightAttackScreenShakeMagnitude,lightAttackScreenShakeMagnitude);
-        ControllerRumble(0.10f,0.4f);
-        swordGlowAmount += 0.8f;
-        //impact ring
-        ImpactRing.SetTrigger("Hit");
-        return HitResult.Land;
+        if (Boss1 != null)
+            Boss1.health -= (int)playerLightHitDamage;
+        if (Boss2 != null && Boss2.CanBeAttacked)
+            Boss2.health -= (int)playerLightHitDamage;
+
+        if (canHitBoss)
+        {
+            HitPause = hitPauseDuration;
+            //particle       
+            Spark.Emit(100);
+            bossFlashAmount += 0.9f;
+            ScreenShake(lightAttackScreenShakeDuration, lightAttackScreenShakeMagnitude, lightAttackScreenShakeMagnitude);
+            ControllerRumble(0.10f, 0.4f);
+            swordGlowAmount += 0.8f;
+            //impact ring
+            ImpactRing.SetTrigger("Hit");
+            return HitResult.Land;
+        }
+        else
+            return HitResult.Miss;
     }
 
     public HitResult HeavyMeleeAttack()
     {
-        Boss.health -= Mathf.RoundToInt(heavyHitDamage);
-        float a = ((heavyHitDamage - playerLightHitDamage)/playerHeavyHitDamageIncreasePerSecond) + 1;
-        HitPause = hitPauseDuration * a;
-        Spark.Emit((int)(100 * a));
-        bossFlashAmount += 0.9f;
-        ScreenShake(lightAttackScreenShakeDuration, lightAttackScreenShakeMagnitude*a, lightAttackScreenShakeMagnitude*a);
-        ControllerRumble(0.15f, 0.4f*a);
-        swordGlowAmount += 0.8f;
-        //impact ring
-        ImpactRing.SetTrigger("Hit");
-        return HitResult.Land;
+        if (Boss1 != null)
+            Boss1.health -= Mathf.RoundToInt(heavyHitDamage);
+        if (Boss2 != null && Boss2.CanBeAttacked)
+            Boss2.health -= Mathf.RoundToInt(heavyHitDamage);
+
+        if (canHitBoss)
+        {
+            float a = ((heavyHitDamage - playerLightHitDamage) / playerHeavyHitDamageIncreasePerSecond) + 1;
+            HitPause = hitPauseDuration * a;
+            Spark.Emit((int)(100 * a));
+            bossFlashAmount += 0.9f;
+            ScreenShake(lightAttackScreenShakeDuration, lightAttackScreenShakeMagnitude * a, lightAttackScreenShakeMagnitude * a);
+            ControllerRumble(0.15f, 0.4f * a);
+            swordGlowAmount += 0.8f;
+            //impact ring
+            ImpactRing.SetTrigger("Hit");
+            return HitResult.Land;
+        }
+        else
+            return HitResult.Miss;
     }
     public HitResult getMeleeAttacked(Location hitLocation, float damage)
     {
@@ -180,6 +233,11 @@ public class PlayerStateManager : MonoBehaviour
             {
                 //play deflect effect here
                 //stun boss;
+                if (Boss1 != null)
+                    Boss1.GetStunned();
+                if (Boss2 != null)
+                    Boss2.GetStunned();
+                //
                 Debug.Log("deflect Succefully");
                 Spark.Emit(150);
                 HitPause = hitPauseDuration;
@@ -211,6 +269,8 @@ public class PlayerStateManager : MonoBehaviour
        t = Mathf.Min(1,t);
         
        PlayerTransform.transform.position = Vector3.Lerp(previous.gameObject.transform.position,newLoc.gameObject.transform.position,t);
+        previous.isOccupied = false;
+        newLoc.isOccupied = true;
     }
 
     public void flip()

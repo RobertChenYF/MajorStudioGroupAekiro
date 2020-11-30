@@ -40,6 +40,7 @@ public class CRT_State_PrepareAttack : CRT_State
         {
             case "Single":
                 targets.Add(player);
+                Boss.SetSound(0);
                 return targets;
 
             case "DoubleHoz":
@@ -55,6 +56,7 @@ public class CRT_State_PrepareAttack : CRT_State
                         if (!Boss.locations[i].isUp)
                             targets.Add(Boss.locations[i]);
                 }
+                Boss.SetSound(0);
                 return targets;
 
             case "DoubleVer":
@@ -70,17 +72,13 @@ public class CRT_State_PrepareAttack : CRT_State
                         if (!Boss.locations[i].isRight)
                             targets.Add(Boss.locations[i]);
                 }
+                Boss.SetSound(0);
                 return targets;
 
             case "AllSimul":
                 foreach (Location t in Boss.locations)
                     targets.Add(t);
-                return targets;
-
-            case "ASDF":
-                return targets;
-
-            case "asdf":
+                Boss.SetSound(2);
                 return targets;
 
             default:
@@ -121,6 +119,7 @@ public class CRT_State_PrepareAttack : CRT_State
         //Duration = DetermineDuration(AttackToPerform); // Determine duration of the current attack
         Boss.targets = DetermineTargets(AttackToPerform, playerLoc); // Determine the target locations based on the current attack
         Boss.TargetLocations(); // Target (visually indicate - yellow) those locations
+        SM.DetermineAnimation(AttackToPerform.GetName());
     }
 
     public override void Leave()
