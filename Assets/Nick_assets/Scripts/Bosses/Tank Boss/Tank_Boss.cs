@@ -41,6 +41,7 @@ public class Tank_Boss : MonoBehaviour
 
     [Header("IDLE")]
     public float TimeBetweenAttacks_1 = 2.5f;
+    public float TimeBetweenAttacks_2 = 1.75f;
 
     [Header("Prepare")]
     public float TimeBeforeDriveLaunch = 1.5f;
@@ -96,7 +97,7 @@ public class Tank_Boss : MonoBehaviour
     public float MortarRetDuration = 1f;
     public int MortarAttackCount = 1;
     public GameObject MortarTarget;
-    public GameObject MortarShot;
+    public GameObject MortarShot_;
 
     [Header("Shoot Oil")]
     public float OilPrepDur = 1f;
@@ -170,7 +171,7 @@ public class Tank_Boss : MonoBehaviour
     {
         if (health > Phase2_Thresh)
             CurrentPhase = 1;
-        else if (health <= Phase2_Thresh)
+        else if (health > 0)
             CurrentPhase = 2;
         else
             isAlive = false;
@@ -190,7 +191,7 @@ public class Tank_Boss : MonoBehaviour
         else
             lookingRight = true;
 
-            if (currentBossLocation.isUp)
+        if (currentBossLocation.isUp)
             isUp = true;
         else
             isUp = false;
@@ -261,6 +262,11 @@ public class Tank_Boss : MonoBehaviour
             }
         }
 
+        if (Vector2.Distance(this.transform.position, player.transform.position) < CollisionRange*2)
+        {
+            if (!CanBeAttacked)
+                CanBeAttacked = true;
+        }
     }
 
     public void TargetLocations()
@@ -351,7 +357,10 @@ public class Tank_Boss : MonoBehaviour
             Manager.PlayAnimation(Tank_StateManager.AnimationState.Tank_ShootMortar_static);
             Manager.PlayAnimation(Tank_StateManager.AnimationState.Tank_ShootMortar);
             loc.TargetMortar();
-            GameObject M = Instantiate(MortarShot, this.transform.position, Quaternion.identity) as GameObject;
+
+            Vector2 spawnLoc = new Vector2(this.transform.position.x-1.5f, this.transform.position.y + 2);
+
+            GameObject M = Instantiate(MortarShot_, spawnLoc, Quaternion.identity) as GameObject;
             M.SendMessage("SetTargetLoc", loc);
             yield return new WaitForSeconds(MortarTimeBtwnShot / count);
         }
@@ -380,8 +389,9 @@ public class Tank_Boss : MonoBehaviour
             SetSound2(5);
             PlaySound_2();
             Debug.Log("FIRE OIL");
+            Vector2 spawnLoc = new Vector2(this.transform.position.x, this.transform.position.y + 2);
 
-            GameObject O = Instantiate(OilShot, this.transform.position, Quaternion.identity) as GameObject;
+            GameObject O = Instantiate(OilShot, spawnLoc, Quaternion.identity) as GameObject;
             O.SendMessage("SetTargetLoc", loc);
             yield return new WaitForSeconds(OilTimeBtwnShot / count);
         }

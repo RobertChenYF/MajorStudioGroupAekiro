@@ -38,9 +38,15 @@ public class Tank_State_Idle : Tank_State
         t = 0;
 
         if (Boss.CurrentPhase == 1)
+        {
             MoveList = SM.MoveList_1;
+            Duration = Boss.TimeBetweenAttacks_1;
+        }
         else if (Boss.CurrentPhase == 2)
+        {
             MoveList = SM.MoveList_2;
+            Duration = Boss.TimeBetweenAttacks_2;
+        }
 
         if (Boss.currentBossLocation.transform.position.x > 0)
             Boss.LookLeft();

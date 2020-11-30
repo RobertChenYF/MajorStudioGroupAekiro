@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Mortar : MonoBehaviour
 {
-    public Location targetLoc;
+    Location targetLoc;
     public float speed_up;
     public float speed_down_front;
     public float speed_down_back;
@@ -17,10 +17,14 @@ public class Mortar : MonoBehaviour
     bool goingDown;
 
     Rigidbody2D rb;
+    SpriteRenderer sp;
+
+    public GameObject explosionObj;
 
     void Start()
     {
         rb = this.GetComponent<Rigidbody2D>();
+        sp = this.GetComponent<SpriteRenderer>();
         goingUp = true;
         goingDown = false;
         t = 0;
@@ -33,6 +37,7 @@ public class Mortar : MonoBehaviour
         if (goingUp)
         {
             rb.MovePosition(transform.position + Vector3.up * speed_up);
+            sp.flipY = true;
         }
         else if (!goingUp && !goingDown)
         {
@@ -49,7 +54,7 @@ public class Mortar : MonoBehaviour
         else if (goingDown)
         {
             rb.MovePosition(transform.position + Vector3.down * speed_down_front);
-
+            sp.flipY = false;
             /*if (targetLoc.isUp)
                 rb.MovePosition(transform.position + Vector3.down * speed_down_back);
             else
@@ -66,6 +71,7 @@ public class Mortar : MonoBehaviour
         else if (transform.position.y <= targetLoc.transform.position.y && goingDown)
         {
             targetLoc.HitMortar(HitDelay);
+            Instantiate(explosionObj, this.transform.position, Quaternion.identity);
             //targetLoc.Hit();
 
             //if (targetLoc.isTargetMortar)
