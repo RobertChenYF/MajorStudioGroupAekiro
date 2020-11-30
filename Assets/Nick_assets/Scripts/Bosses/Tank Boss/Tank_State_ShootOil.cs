@@ -58,6 +58,8 @@ public class Tank_State_ShootOil : Tank_State
     {
         t1 = 0; t2 = 0; t3 = 0;
         prepPhase = true; shootPhase = false; returnPhase = false;
+        SM.PlayAnimation(Tank_StateManager.AnimationState.Tank_Shoot);
+
     }
 
     public override void Leave()

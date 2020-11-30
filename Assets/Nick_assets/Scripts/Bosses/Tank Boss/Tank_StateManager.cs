@@ -25,6 +25,7 @@ public class Tank_StateManager : MonoBehaviour
     public Tank_State ShootMortar_1;
     public Tank_State ShootMortar_2;
     public Tank_State ShootOil_1;
+    public Tank_State ShootOil_2;
 
     public Tank_State Stunned;
     public Tank_State Dead;
@@ -46,7 +47,7 @@ public class Tank_StateManager : MonoBehaviour
 
     public Tank_State nextAttackState;
 
-    public enum AnimationState { Tank_Idle, Tank_Jump_start, Tank_Jump_during, Tank_Jump_end, Tank_ShootMortar_start, Tank_ShootMortar_static, Tank_ShootMortar_end, Tank_ShootMortar, Tank_Driving, Tank_Double, Tank_Shoot };
+    public enum AnimationState { Tank_Idle, Tank_Die, Tank_Dead, Tank_Jump_start, Tank_Jump_during, Tank_Jump_end, Tank_ShootMortar_start, Tank_ShootMortar_static, Tank_ShootMortar_end, Tank_ShootMortar, Tank_Driving, Tank_Double, Tank_Shoot };
     private AnimationState currentAnimationState;
     public Animator myBossAnimator;
 
@@ -71,11 +72,14 @@ public class Tank_StateManager : MonoBehaviour
         ShootMortar_1 = new Tank_State_ShootMortar(Main_SM, Boss, "Mortar_1", Boss.MortarPrepDuration, Boss.MortarTimeBtwnShot, Boss.MortarRetDuration, 1);
         ShootMortar_2 = new Tank_State_ShootMortar(Main_SM, Boss, "Mortar_2", Boss.MortarPrepDuration, Boss.MortarTimeBtwnShot, Boss.MortarRetDuration, 2);
         ShootOil_1 = new Tank_State_ShootOil(Main_SM, Boss, "Oil_1", Boss.OilPrepDur, Boss.OilHitDuration, Boss.OilRetDur, 1);
-        Stunned = new Tank_State_Stunned(Main_SM, Boss, "Stunned", Boss.StunDuration);
+        ShootOil_2 = new Tank_State_ShootOil(Main_SM, Boss, "Oil_2", Boss.OilPrepDur, Boss.OilHitDuration, Boss.OilRetDur, 2);
 
-        //MoveList_1 = new Tank_State[] {  };
+        Stunned = new Tank_State_Stunned(Main_SM, Boss, "Stunned", Boss.StunDuration);
+        Dead = new Tank_State_Dead(Main_SM, Boss, "Dead", 0);
+
+        //MoveList_1 = new Tank_State[] { ShootMortar_1 };
         MoveList_1 = new Tank_State[] { DriveBy, AttackJumpSingle, AttackJumpSingle, ShootMortar_1, ShootOil_1, Reposition };
-        MoveList_2 = new Tank_State[] { DriveBy, AttackJumpTriple, AttackJumpTriple, ShootMortar_2, ShootMortar_2, ShootOil_1, Reposition };
+        MoveList_2 = new Tank_State[] { DriveBy, AttackJumpTriple, AttackJumpTriple, ShootMortar_2, ShootMortar_2, ShootOil_1, ShootOil_2, Reposition };
 
         attackStateList = new Tank_State[] { AttackJumpTriple };
         //attackStateList = new Tank_State[] { ShootGunTriple, ShootGunSingle, DriveBy, AttackJumpSingle, AttackJumpTriple, Reposition };
@@ -89,9 +93,13 @@ public class Tank_StateManager : MonoBehaviour
             currentState.DoState();
         else
         {
-            //PlayAnimation(AnimationState.CRT_Dead);
-            ////ChangeState(Dead);
+            ChangeState(Dead);
         }
+    }
+
+    public void Die()
+    {
+        PlayAnimation(AnimationState.Tank_Dead);
     }
 
     public void ChangeState(Tank_State newState)
@@ -146,5 +154,10 @@ public class Tank_StateManager : MonoBehaviour
     public void BackToIdle()
     {
         ChangeState(Idle);
+    }
+
+    public void IdleAnim()
+    {
+        PlayAnimation(AnimationState.Tank_Idle);
     }
 }

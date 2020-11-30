@@ -126,6 +126,13 @@ public class Tank_State_Prepare : Tank_State
                 TargetPlayerLocation();
                 SM.ChangeState(SM.ShootOil_1);
                 break;
+
+            case "Oil_2":
+                Boss.SetSound2(5);
+                TargetMultipleLocations(SM.ShootOil_2.GetNumAttacks());
+                SM.ChangeState(SM.ShootOil_2);
+                break;
+
             default:
                 SM.ChangeState(SM.Idle);
                 break;

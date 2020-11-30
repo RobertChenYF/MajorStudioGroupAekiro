@@ -26,6 +26,7 @@ public class Location : MonoBehaviour
     public float fireDur = 0.5f;
     public float OilDuration = 2f;
 
+    public AudioSource source;
 
     void Start()
     {
@@ -88,6 +89,10 @@ public class Location : MonoBehaviour
     }
     public void HitMortar(float delay)
     {
+        if (source != null)
+        {
+            source.Play();
+        }
         StartCoroutine(HitMortarDelay(delay));
     }
     IEnumerator HitMortarDelay(float delay)

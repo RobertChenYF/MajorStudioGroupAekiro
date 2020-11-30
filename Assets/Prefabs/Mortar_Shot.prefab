@@ -28,7 +28,7 @@ Transform:
   m_GameObject: {fileID: 3133693966512685269}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -0.3678509, y: 0.32751232, z: -1.7394592}
-  m_LocalScale: {x: 1, y: 1.5, z: 1}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -73,8 +73,8 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 180ae0335731c3b4f8e4ba1b2e7e8ac8, type: 3}
-  m_Color: {r: 0.9811321, g: 0.71575075, b: 0.26379493, a: 1}
+  m_Sprite: {fileID: 21300000, guid: 96711cffaa9edbb438527f8486b7e52f, type: 3}
+  m_Color: {r: 0.9622642, g: 0.8110392, b: 0.5492168, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -96,13 +96,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9bc43300cfba0dc4faa15fa42a94958b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  targetLoc: {fileID: 0}
   speed_up: 0.2
   speed_down_front: 0.15
   speed_down_back: 0.15
   hangDuration: 3
   maxHeight: 10
   HitDelay: 0.5
+  explosionObj: {fileID: 2876314707972865409, guid: b1fb5d2f53eb330429f73eadbb078692, type: 3}
 --- !u!50 &3133693966512685265
 Rigidbody2D:
   serializedVersion: 4
