@@ -232,10 +232,10 @@ public class Deflect : PlayerState
     {
         timer += Time.deltaTime;
         playerStateManager.swordGlowAmount = 1.7f;
-        if (!Input.GetButton("block"))
-        {
-            playerStateManager.ChangeState(new BlockRecover(playerStateManager));
-        }
+        //if (!Input.GetButton("block"))
+      //  {
+          //  playerStateManager.ChangeState(new BlockRecover(playerStateManager));
+       // }
         if (timer >= playerStateManager.PerfectDeflectWindow)
         {
             playerStateManager.ChangeState(new Blocking(playerStateManager));
@@ -539,12 +539,13 @@ public class Stun : PlayerState
         base.Enter();
         //play stun animation
         playerStateManager.PlayAnimation(PlayerStateManager.AnimationState.Stun);
-        playerStateManager.characterMaterial.SetFloat("_getHit", 1);
+        playerStateManager.hitflash = 1;
     }
     public override void Leave()
     {
         base.Leave();
-        playerStateManager.characterMaterial.SetFloat("_getHit", 0);
+        playerStateManager.hitflash = 0;
+        
     }
 }
 
@@ -557,7 +558,7 @@ public class Death : PlayerState
     }
     public override void StateBehavior()
     {
-        if (Input.anyKeyDown)
+        if (Input.GetButtonDown("continue"))
         {
             playerStateManager.RestartGame();
         }
@@ -569,6 +570,7 @@ public class Death : PlayerState
         base.Enter();
         playerStateManager.PlayAnimation(PlayerStateManager.AnimationState.Stun);
         playerStateManager.TurnOnDeathScreen();
+        Time.timeScale = 1;
     }
     public override void Leave()
     {

@@ -9,6 +9,7 @@ public class PlayerStateManager : MonoBehaviour
     private PlayerState currentPlayerState;
     public SpriteRenderer BossSpriteRenderer;
     private Material BossMat;
+    [HideInInspector]public float hitflash = 0;
     [SerializeField]private GameObject DeathScreen;
     [SerializeField] private AudioSource playerAudioSource;
     [HideInInspector] public Material characterMaterial;
@@ -90,11 +91,13 @@ public class PlayerStateManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        
         characterMaterial = GetComponentsInChildren<SpriteRenderer>()[0].material;
         defaultSwordColor = characterMaterial.GetColor("_SwordColor");
         screenShakeControl = GameObject.Find("ScreenShakerManager").GetComponent<ScreenShakeControl>();
-        currentLoc = locA;
+        currentLoc = locC;
         currentLoc.isOccupied = true;
+        PlayerTransform.transform.position = currentLoc.transform.position;
         playerCurrentHealth = playerFullHealth;
         //BossAnimation = Boss.gameObject.GetComponent<Animator>();
         BossMat = BossSpriteRenderer.material;
@@ -106,23 +109,22 @@ public class PlayerStateManager : MonoBehaviour
     void Update()
     {
         Debug.Log(canHitBoss);
+        if (hitflash >0)
+        {
+            characterMaterial.SetFloat("_getHit", 1);
+            hitflash -= Time.deltaTime;
+        }
+        else
+        {
+            characterMaterial.SetFloat("_getHit", 0);
+        }
         if (playerCurrentHealth<=0&&currentPlayerState.ToString() != "Death")
         {
             ChangeState(new Death(this));
         }
         currentPlayerState.StateBehavior();
         playerHealthBar.fillAmount = playerCurrentHealth / playerFullHealth;
-        if (HitPause > 0)
-        {
-            HitPause -= Time.deltaTime;
-            mainCharacterAnimation.speed = 0;
-            BossAnimation.speed = 0;
-        }
-        else
-        {
-            mainCharacterAnimation.speed = 1;
-            BossAnimation.speed = 1;
-        }
+        
         //Debug.Log(currentPlayerState.ToString());
 
         BossMat.SetFloat("_flashAmount", bossFlashAmount);
@@ -146,7 +148,10 @@ public class PlayerStateManager : MonoBehaviour
             canHitBoss = true;
 
     }
+    private void FixedUpdate()
+    {
 
+    }
     private void LookAtBoss()
     {
         if (PlayerTransform.transform.localScale.x < 0)
@@ -197,7 +202,8 @@ public class PlayerStateManager : MonoBehaviour
 
         if (canHitBoss)
         {
-            HitPause = hitPauseDuration;
+            //HitPause = hitPauseDuration;
+            Stop(hitPauseDuration);
             //particle       
             Spark.Emit(100);
             bossFlashAmount += 0.9f;
@@ -223,7 +229,8 @@ public class PlayerStateManager : MonoBehaviour
         if (canHitBoss)
         {
             float a = ((heavyHitDamage - playerLightHitDamage) / playerHeavyHitDamageIncreasePerSecond) + 1;
-            HitPause = hitPauseDuration * a;
+            //HitPause = hitPauseDuration * a;
+            Stop(hitPauseDuration*a);
             Spark.Emit((int)(100 * a));
             bossFlashAmount += 0.9f;
             ScreenShake(lightAttackScreenShakeDuration, lightAttackScreenShakeMagnitude * a, lightAttackScreenShakeMagnitude * a);
@@ -257,11 +264,11 @@ public class PlayerStateManager : MonoBehaviour
                 ScreenShake(0.1f,0.2f,0.2f);
                 ControllerRumble(0.15f, 0.4f);
                 PlayPlayerSound(deflectSound,Random.Range(0.9f,1.1f),1);
-                HitPause = hitPauseDuration;
+                Stop(hitPauseDuration);
                 //if (Boss1 != null)
-                   // Boss1.GetStunned();
-               // if (Boss2 != null)
-                   // Boss2.GetStunned();
+                // Boss1.GetStunned();
+                // if (Boss2 != null)
+                // Boss2.GetStunned();
                 return HitResult.Deflect;
                 
             }
@@ -273,7 +280,7 @@ public class PlayerStateManager : MonoBehaviour
                 playerCurrentHealth -= damage * BlockDamagePercentage;
                 PlayPlayerSound(blockSound, Random.Range(0.9f, 1.1f), 0.7f);
                 ScreenShake(0.13f, 0.3f, 0.3f);
-                HitPause = hitPauseDuration;
+                Stop(hitPauseDuration);
                 return HitResult.Block;
             }
             else
@@ -282,13 +289,19 @@ public class PlayerStateManager : MonoBehaviour
                 playerCurrentHealth -= damage;
                 PlayPlayerSound(getHitSound, Random.Range(0.9f, 1.1f), 0.7f);
                 ScreenShake(0.13f, 0.3f, 0.3f);
-                HitPause = hitPauseDuration;
-                ChangeState(new Stun(this));
+                hitflash = 0.3f;
+                if (currentPlayerState.ToString()!= "Roll" && currentPlayerState.ToString()!= "Shuffle")
+                {
+                    ChangeState(new Stun(this));
+                }
+                
+                Stop(hitPauseDuration);
                 return HitResult.Land;
             }
         }
         
     }
+
 
     public void MoveTransform(float t, Location previous, Location newLoc)
     {
@@ -349,5 +362,25 @@ public class PlayerStateManager : MonoBehaviour
     public void TurnOnDeathScreen()
     {
         DeathScreen.SetActive(true);
+    }
+
+    bool waiting = false;
+    public void Stop(float duration, float timeScale)
+    {
+        if (waiting)
+            return;
+        Time.timeScale = timeScale;
+        StartCoroutine(Wait(duration));
+    }
+    public void Stop(float duration)
+    {
+        Stop(duration, 0.0f);
+    }
+    IEnumerator Wait(float duration)
+    {
+        waiting = true;
+        yield return new WaitForSecondsRealtime(duration);
+        Time.timeScale = 1.0f;
+        waiting = false;
     }
 }

@@ -68,7 +68,7 @@ public class Mortar : MonoBehaviour
         {
             goingUp = false;
         }
-        else if (transform.position.y <= targetLoc.transform.position.y && goingDown)
+        else if (transform.position.y <= targetLoc.transform.position.y-1.8f && goingDown)
         {
             targetLoc.HitMortar(HitDelay);
             Instantiate(explosionObj, this.transform.position, Quaternion.identity);

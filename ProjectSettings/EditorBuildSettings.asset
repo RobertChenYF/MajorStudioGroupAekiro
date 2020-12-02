@@ -8,4 +8,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/CombatTesting_scene.unity
     guid: ea0ef0f889ccc6345adaf38fb6d456af
+  - enabled: 1
+    path: Assets/Scenes/CombatTesting_Boss2.unity
+    guid: 5013de9487e3cad44a8fab6adc3a3281
   m_configObjects: {}
